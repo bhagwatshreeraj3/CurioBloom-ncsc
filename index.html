@@ -1,0 +1,5018 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CurioBloom 🌱 — Real Hands-on Science Lab & Kit</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+
+    <!-- Firebase Configuration -->
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDNOFc68ifBIutnaQvTBdQLMycAn5gEeXs",
+            authDomain: "curiosbloom.firebaseapp.com",
+            projectId: "curiosbloom",
+            storageBucket: "curiosbloom.firebasestorage.app",
+            messagingSenderId: "920526145297",
+            appId: "1:920526145297:web:085f10d270cdb021b8eeb0"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const firebaseAuth = firebase.auth();
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,600;0,700;0,800;0,900;1,800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cream: '#FFFDF5',
+                        lime: '#D1FF52',
+                        violet: '#A855F7',
+                        canary: '#FEF08A',
+                        coral: '#FF7E5F',
+                        teal: '#2DD4BF',
+                        dark: '#121212'
+                    },
+                    boxShadow: {
+                        'brutal': '4px 4px 0px 0px #000000',
+                        'brutal-lg': '6px 6px 0px 0px #000000',
+                        'brutal-xl': '8px 8px 0px 0px #000000',
+                        'brutal-hover': '2px 2px 0px 0px #000000'
+                    },
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #FFFDF5;
+            color: #121212;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .brutal-border {
+            border: 3px solid #000000;
+        }
+
+        .brutal-card {
+            border: 3px solid #000000;
+            box-shadow: 5px 5px 0px 0px #000000;
+            transition: all 0.15s ease-in-out;
+        }
+
+        .brutal-card:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 7px 7px 0px 0px #000000;
+        }
+
+        .brutal-btn {
+            border: 3px solid #000000;
+            box-shadow: 4px 4px 0px 0px #000000;
+            font-weight: 800;
+            transition: all 0.1s ease-in-out;
+            cursor: pointer;
+        }
+
+        .brutal-btn:hover {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px 0px #000000;
+        }
+
+        .brutal-btn:active {
+            transform: translate(4px, 4px);
+            box-shadow: 0px 0px 0px 0px #000000;
+        }
+
+        .brutal-badge {
+            border: 2px solid #000000;
+            box-shadow: 2px 2px 0px 0px #000000;
+            font-weight: 800;
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #FFFDF5;
+            border-left: 3px solid #000;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #A855F7;
+            border: 2px solid #000;
+        }
+
+        .modal-overlay {
+            background-color: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(4px);
+        }
+
+        @keyframes bounceShort {
+            0%, 100% {
+                transform: translateY(0) scale(1);
+            }
+
+            50% {
+                transform: translateY(-8px) scale(1.02);
+            }
+        }
+
+        .animate-bounce-short {
+            animation: bounceShort 2.5s infinite ease-in-out;
+        }
+
+        @keyframes floatSlow {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-12px) rotate(8deg);
+            }
+        }
+
+        .animate-float-slow {
+            animation: floatSlow 3s ease-in-out infinite;
+        }
+
+        #recaptcha-container {
+            margin: 0 auto;
+        }
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+
+            #printableCertificateArea,
+            #printableCertificateArea * {
+                visibility: visible;
+            }
+
+            #printableCertificateArea {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body class="antialiased selection:bg-lime selection:text-black">
+
+    <!-- General Toast Notifications -->
+    <div id="toastContainer"
+         class="fixed bottom-5 right-5 z-[120] flex flex-col gap-2 pointer-events-none">
+    </div>
+
+    <!-- Opening Animation Screen -->
+    <div id="openingIntro"
+         class="fixed inset-0 z-[100] bg-lime flex flex-col items-center justify-center p-6 transition-all duration-700 ease-in-out overflow-hidden">
+
+        <div class="absolute top-12 left-10 text-4xl animate-float-slow opacity-80 select-none">🧪</div>
+        <div class="absolute bottom-16 left-16 text-4xl animate-float-slow opacity-80 select-none"
+             style="animation-delay: 0.8s;">💎</div>
+        <div class="absolute top-16 right-12 text-4xl animate-float-slow opacity-80 select-none"
+             style="animation-delay: 1.2s;">✨</div>
+        <div class="absolute bottom-20 right-20 text-4xl animate-float-slow opacity-80 select-none"
+             style="animation-delay: 0.4s;">🧼</div>
+
+        <div class="relative max-w-md w-full bg-cream brutal-card rounded-3xl p-8 text-center space-y-6 animate-bounce-short z-20">
+
+            <div class="inline-flex items-center gap-2 bg-canary brutal-badge px-4 py-1.5 rounded-full text-xs uppercase font-black">
+                <span class="animate-spin inline-block">⚡</span>
+                Initializing Science Lab...
+            </div>
+
+            <div class="relative w-28 h-28 mx-auto">
+                <div class="w-28 h-28 bg-violet brutal-border rounded-2xl flex items-center justify-center text-6xl shadow-brutal transform rotate-3 hover:rotate-12 transition-transform">
+                    🌱
+                </div>
+
+                <div class="absolute -top-3 -right-3 w-10 h-10 bg-canary brutal-border rounded-full flex items-center justify-center text-base font-black animate-spin">
+                    🧪
+                </div>
+            </div>
+
+            <div class="space-y-1">
+                <h1 class="text-3xl sm:text-4xl font-black tracking-tight">CurioBloom</h1>
+                <p class="text-[11px] sm:text-xs font-extrabold text-gray-800 uppercase tracking-widest">
+                    Where Curiosity Meets Blooming
+                </p>
+            </div>
+
+            <div class="space-y-3 pt-1">
+                <div class="flex items-center justify-between text-xs font-black">
+                    <span id="introStatusText" class="text-gray-800">
+                        Preparing lab equipment...
+                    </span>
+
+                    <span id="introPercent"
+                          class="bg-canary brutal-badge px-2 py-0.5 rounded-md">
+                        0%
+                    </span>
+                </div>
+
+                <div class="w-full h-6 bg-white brutal-border rounded-full overflow-hidden p-1 shadow-inner">
+                    <div id="introProgress"
+                         class="h-full bg-coral rounded-full transition-all duration-300 w-0">
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-center gap-4 pt-2">
+                <button onclick="hideIntroOverlay(); playSound('click');"
+                        class="px-6 py-2.5 bg-lime text-black brutal-btn rounded-xl text-xs font-black flex items-center gap-1.5 hover:bg-canary">
+                    <span>Enter Science Lab</span>
+                    <span>🚀</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header Navigation -->
+    <header class="sticky top-0 z-40 w-full bg-cream brutal-border border-t-0 border-x-0 border-b-4">
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+
+            <a href="#" class="flex items-center gap-2 group">
+                <div class="w-10 h-10 bg-lime brutal-border flex items-center justify-center text-xl shadow-brutal group-hover:rotate-6 transition-transform">
+                    🌱
+                </div>
+
+                <span class="text-2xl font-black tracking-tight">
+                    CurioBloom
+                </span>
+            </a>
+
+            <nav class="hidden md:flex items-center gap-6 font-bold text-sm">
+                <a href="#kit" class="hover:underline decoration-3 decoration-violet">
+                    The Kit
+                </a>
+
+                <a href="#labSimulator" class="hover:underline decoration-3 decoration-coral">
+                    Virtual Lab
+                </a>
+
+                <a href="#selftest" class="hover:underline decoration-3 decoration-teal">
+                    Self-Test
+                </a>
+
+                <a href="#reviews" class="hover:underline decoration-3 decoration-coral">
+                    Reviews
+                </a>
+
+                <a href="#about" class="hover:underline decoration-3 decoration-canary">
+                    Creators
+                </a>
+
+                <a href="#faq" class="hover:underline decoration-3 decoration-violet">
+                    FAQ
+                </a>
+
+                <button onclick="replayIntro()"
+                        class="px-2.5 py-1 bg-canary brutal-border rounded-lg text-xs font-black hover:bg-lime transition-colors"
+                        title="Replay intro animation">
+                    🎬 Replay Intro
+                </button>
+            </nav>
+
+            <div class="flex items-center gap-3">
+
+                <div id="loggedOutNav" class="flex items-center gap-3">
+
+                    <button onclick="openAuthModal('login'); playSound('click');"
+                            class="hidden sm:block px-4 py-2 bg-white brutal-btn text-sm rounded-xl">
+                        Login
+                    </button>
+
+                    <button onclick="openAuthModal('join'); playSound('click');"
+                            class="px-5 py-2.5 bg-lime text-black brutal-btn text-sm rounded-xl flex items-center gap-2">
+                        <span>Get Kit (₹899)</span>
+                        <span class="bg-black text-lime text-[10px] px-1.5 py-0.5 rounded-full font-black">
+                            SAVE 25%
+                        </span>
+                    </button>
+
+                </div>
+
+                <div id="loggedInNav" class="hidden flex items-center gap-2">
+
+                    <button onclick="openDashboardModal(); playSound('click');"
+                            class="px-3.5 py-2 bg-canary brutal-btn rounded-xl text-xs flex items-center gap-2 hover:bg-lime">
+                        <span>👤</span>
+                        <span id="navUserName" class="font-extrabold">
+                            Explorer
+                        </span>
+                        <span class="bg-black text-lime px-1.5 py-0.5 rounded text-[10px]">
+                            Dashboard
+                        </span>
+                    </button>
+
+                    <button onclick="handleLogout()"
+                            class="px-3 py-2 bg-white brutal-btn text-xs rounded-xl hover:bg-coral hover:text-white">
+                        Logout
+                    </button>
+
+                </div>
+
+                <button onclick="toggleMobileMenu()"
+                        class="md:hidden p-2 bg-canary brutal-border rounded-lg">
+
+                    <svg class="w-6 h-6"
+                         fill="none"
+                         stroke="currentColor"
+                         viewBox="0 0 24 24">
+                        <path stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="3"
+                              d="M4 6h16M4 12h16M4 18h16">
+                        </path>
+                    </svg>
+
+                </button>
+
+            </div>
+        </div>
+
+        <div id="mobileMenu"
+             class="hidden md:hidden brutal-border border-x-0 border-b-4 bg-canary p-6 space-y-4">
+
+            <a href="#kit" onclick="toggleMobileMenu()" class="block font-black text-lg">
+                The Kit
+            </a>
+
+            <a href="#labSimulator" onclick="toggleMobileMenu()" class="block font-black text-lg">
+                🧪 Virtual Lab
+            </a>
+
+            <a href="#selftest" onclick="toggleMobileMenu()" class="block font-black text-lg">
+                Self-Test Quiz
+            </a>
+
+            <a href="#reviews" onclick="toggleMobileMenu()" class="block font-black text-lg">
+                Reviews
+            </a>
+
+            <a href="#about" onclick="toggleMobileMenu()" class="block font-black text-lg">
+                Creators
+            </a>
+
+            <a href="#faq" onclick="toggleMobileMenu()" class="block font-black text-lg">
+                FAQ
+            </a>
+
+            <hr class="border-black border-2">
+
+            <div id="mobileLoggedOut" class="flex gap-4">
+
+                <button onclick="openAuthModal('login'); toggleMobileMenu()"
+                        class="w-1/2 py-3 bg-white brutal-btn rounded-xl font-bold">
+                    Login
+                </button>
+
+                <button onclick="openAuthModal('join'); toggleMobileMenu()"
+                        class="w-1/2 py-3 bg-lime brutal-btn rounded-xl font-bold">
+                    Join Now
+                </button>
+
+            </div>
+
+            <div id="mobileLoggedIn"
+                 class="hidden flex justify-between items-center bg-white p-3 brutal-border rounded-xl">
+
+                <button onclick="openDashboardModal(); toggleMobileMenu()"
+                        class="font-black text-sm text-left">
+                    👤
+                    <span id="mobileUserName">Explorer</span>
+                    (Dashboard)
+                </button>
+
+                <button onclick="handleLogout()"
+                        class="px-3 py-1 bg-coral text-white brutal-btn text-xs rounded-lg">
+                    Logout
+                </button>
+
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="py-12 md:py-20 px-4 max-w-7xl mx-auto">
+
+        <div class="grid md:grid-cols-12 gap-8 items-center">
+
+            <div class="md:col-span-7 space-y-6 text-left">
+
+                <div class="inline-flex items-center gap-2 bg-canary brutal-badge px-4 py-1.5 rounded-full text-xs sm:text-sm uppercase tracking-wider">
+                    <span>⚡ Less scrolling. More real discovering.</span>
+                </div>
+
+                <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black leading-none tracking-tight">
+                    Where curiosity <br>
+
+                    <span class="bg-lime px-3 py-1 inline-block my-1 brutal-border shadow-brutal rotate-1">
+                        meets blooming.
+                    </span>
+                </h1>
+
+                <p class="text-lg sm:text-xl font-bold text-gray-800 max-w-2xl leading-relaxed">
+                    A hands-on science adventure designed to turn curiosity into creativity,
+                    experimentation, and real learning — one discovery at a time.
+                </p>
+
+                <div class="flex flex-wrap gap-4 pt-2">
+
+                    <button onclick="openAuthModal('join'); playSound('click');"
+                            class="px-8 py-4 bg-coral text-white text-lg font-black brutal-btn rounded-2xl flex items-center gap-2">
+                        <span>🌱 Order Real Kit (₹899)</span>
+                    </button>
+
+                    <a href="#labSimulator"
+                       onclick="playSound('click');"
+                       class="px-8 py-4 bg-violet text-white text-lg font-black brutal-btn rounded-2xl flex items-center gap-2">
+                        <span>🧪 Try Virtual Lab Simulator</span>
+                    </a>
+
+                </div>
+
+                <div class="flex items-center gap-4 text-xs font-bold pt-4 flex-wrap">
+                    <span class="flex items-center gap-1">
+                        🧪 5 Real Experiments
+                    </span>
+
+                    <span>•</span>
+
+                    <span class="flex items-center gap-1">
+                        🚫 100% Screen-Free Physical Kit
+                    </span>
+
+                    <span>•</span>
+
+                    <span class="flex items-center gap-1">
+                        📜 Real Printable Certificate
+                    </span>
+                </div>
+            </div>
+
+            <div class="md:col-span-5">
+
+                <div class="relative bg-teal p-6 brutal-card rounded-3xl">
+
+                    <div class="bg-white brutal-border p-6 rounded-2xl relative overflow-hidden space-y-4">
+
+                        <span class="absolute top-3 right-3 bg-coral text-white brutal-badge px-3 py-1 rounded-full text-xs rotate-6 z-10">
+                            Full Physical Kit 🧪
+                        </span>
+
+                        <div class="relative w-full h-48 rounded-xl brutal-border overflow-hidden group">
+
+                            <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=800&q=80"
+                                 alt="CurioBloom Real Hands-On Science Kit"
+                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-3">
+                                <span class="text-white text-xs font-black">
+                                    📸 Actual Unpackaged Science Kit
+                                </span>
+                            </div>
+
+                        </div>
+
+                        <div class="text-center space-y-2">
+
+                            <h3 class="text-2xl font-black">
+                                The CurioBloom Box
+                            </h3>
+
+                            <p class="text-xs font-bold text-gray-700">
+                                5 Complete Hands-On Lab Experiences + Journal & Certificate
+                            </p>
+
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2 text-center text-xs font-bold pt-2 border-t-2 border-black">
+
+                            <div class="p-2 bg-lime brutal-border rounded-lg">
+                                💎 Crystal Vault
+                            </div>
+
+                            <div class="p-2 bg-canary brutal-border rounded-lg">
+                                🕯️ Wax Engineer
+                            </div>
+
+                            <div class="p-2 bg-violet text-white brutal-border rounded-lg">
+                                🧼 Soap Lab
+                            </div>
+
+                            <div class="p-2 bg-coral text-white brutal-border rounded-lg">
+                                🛁 Fizz Lab
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Virtual Lab Simulator Section -->
+    <section id="labSimulator"
+             class="py-16 bg-cream brutal-border border-x-0 border-y-4">
+
+        <div class="max-w-6xl mx-auto px-4">
+
+            <div class="text-center space-y-3 mb-8">
+
+                <span class="bg-violet text-white brutal-badge px-4 py-1.5 rounded-full text-xs uppercase font-extrabold">
+                    Real-Time Interactive Feature
+                </span>
+
+                <h2 class="text-3xl sm:text-5xl font-black">
+                    Interactive Virtual Science Lab
+                </h2>
+
+                <p class="text-sm sm:text-base font-bold text-gray-800">
+                    Test chemical reactions right now in your browser before ordering your physical kit!
+                </p>
+
+            </div>
+
+            <div class="bg-white brutal-card rounded-3xl p-6 md:p-8 space-y-6">
+
+                <div class="flex flex-wrap items-center justify-between gap-4 border-b-2 border-black pb-4">
+
+                    <div class="flex gap-2 flex-wrap">
+
+                        <button onclick="setExperiment('fizz')"
+                                id="expBtnFizz"
+                                class="px-4 py-2 bg-coral text-white brutal-btn rounded-xl text-xs font-black">
+                            💥 Fizz Reaction (Acid + Base)
+                        </button>
+
+                        <button onclick="setExperiment('crystal')"
+                                id="expBtnCrystal"
+                                class="px-4 py-2 bg-white brutal-btn rounded-xl text-xs font-black">
+                            💎 Crystal Growth
+                        </button>
+
+                        <button onclick="setExperiment('soap')"
+                                id="expBtnSoap"
+                                class="px-4 py-2 bg-white brutal-btn rounded-xl text-xs font-black">
+                            🫧 Soap Foamer
+                        </button>
+
+                    </div>
+
+                    <div class="flex items-center gap-2">
+
+                        <button onclick="resetLabCanvas()"
+                                class="px-3 py-1.5 bg-canary brutal-border rounded-lg text-xs font-bold hover:bg-lime">
+                            🔄 Reset Beaker
+                        </button>
+
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-12 gap-6 items-center">
+
+                    <div class="md:col-span-7 bg-canary brutal-border rounded-2xl p-4 flex flex-col items-center justify-center relative min-h-[320px]">
+
+                        <canvas id="labCanvas"
+                                width="400"
+                                height="300"
+                                class="w-full max-w-[400px] h-[300px] bg-white brutal-border rounded-xl shadow-inner cursor-pointer">
+                        </canvas>
+
+                        <p class="text-[11px] font-black mt-2 text-gray-800">
+                            💡 Tap/Click inside the beaker to trigger chemical reaction!
+                        </p>
+
+                    </div>
+
+                    <div class="md:col-span-5 space-y-4">
+
+                        <div id="simControls"
+                             class="space-y-3 bg-cream p-4 brutal-border rounded-2xl text-xs font-bold">
+
+                            <h4 id="simTitle"
+                                class="font-black text-sm text-violet">
+                                💥 Acid-Base Neutralization Lab
+                            </h4>
+
+                            <p id="simDesc" class="text-gray-700">
+                                Adjust reactant concentrations to produce real CO2 bubbling gas energy!
+                            </p>
+
+                            <div class="space-y-1">
+
+                                <label class="flex justify-between text-[11px] font-black">
+                                    <span>Reactant Drops (Citric Acid):</span>
+                                    <span id="valReactant">5</span>
+                                </label>
+
+                                <input type="range"
+                                       id="sliderReactant"
+                                       min="1"
+                                       max="20"
+                                       value="5"
+                                       oninput="updateLabParams()"
+                                       class="w-full accent-coral cursor-pointer">
+
+                            </div>
+
+                            <div class="space-y-1">
+
+                                <label class="flex justify-between text-[11px] font-black">
+                                    <span>Temperature (°C):</span>
+                                    <span id="valTemp">45°C</span>
+                                </label>
+
+                                <input type="range"
+                                       id="sliderTemp"
+                                       min="10"
+                                       max="90"
+                                       value="45"
+                                       oninput="updateLabParams()"
+                                       class="w-full accent-violet cursor-pointer">
+
+                            </div>
+
+                            <button onclick="triggerReaction(); playSound('fizz');"
+                                    class="w-full py-3 bg-lime brutal-btn rounded-xl font-black text-xs flex items-center justify-center gap-2">
+                                <span>⚡ Trigger Reaction in Beaker!</span>
+                            </button>
+
+                        </div>
+
+                        <div class="bg-lime p-4 brutal-border rounded-2xl text-xs font-bold space-y-1">
+
+                            <span class="font-black uppercase text-[10px] text-gray-800">
+                                🔬 Scientific Discovery:
+                            </span>
+
+                            <p id="simScienceNote" class="text-gray-900">
+                                When Baking Soda (Sodium Bicarbonate) reacts with Citric Acid in liquid water,
+                                Carbon Dioxide (CO2) gas is generated instantly!
+                            </p>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- The Kit Missions Section -->
+    <section id="kit" class="py-20 px-4 max-w-7xl mx-auto">
+
+        <div class="text-center max-w-3xl mx-auto space-y-3 mb-16">
+
+            <span class="bg-lime brutal-badge px-4 py-1.5 rounded-full text-xs uppercase font-extrabold">
+                5 Real Experiences In 1 Box
+            </span>
+
+            <h2 class="text-3xl sm:text-5xl font-black">
+                Inside The Physical CurioBloom Kit
+            </h2>
+
+            <p class="text-base sm:text-lg font-bold text-gray-700">
+                Five distinct hands-on laboratory experiences delivered directly to your doorstep.
+            </p>
+
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+            <div class="bg-white brutal-card rounded-3xl p-6 flex flex-col justify-between space-y-4">
+
+                <div class="space-y-3">
+
+                    <div class="flex items-center justify-between">
+                        <span class="text-4xl">💎</span>
+                        <span class="bg-teal brutal-badge px-3 py-1 rounded-full text-xs font-black">
+                            Mission 01
+                        </span>
+                    </div>
+
+                    <h3 class="text-2xl font-black">
+                        The Crystal Vault
+                    </h3>
+
+                    <p class="text-xs font-black uppercase tracking-wider text-violet">
+                        Crystal Growing
+                    </p>
+
+                    <p class="text-sm font-bold text-gray-700">
+                        Explore supersaturated solutions, crystallization,
+                        and discover how temperature shapes geometry.
+                    </p>
+
+                </div>
+
+                <div class="space-y-2">
+
+                    <div class="bg-canary p-3 brutal-border rounded-xl text-xs font-bold">
+                        🔍 <strong>What you explore:</strong>
+                        Molecular bonds & crystallization rates.
+                    </div>
+
+                    <button onclick="openManualModal(1)"
+                            class="w-full py-2 bg-white brutal-btn rounded-xl text-xs font-black flex items-center justify-center gap-1 hover:bg-lime">
+                        📖 View Experiment Manual & Formula
+                    </button>
+
+                </div>
+            </div>
+
+            <div class="bg-white brutal-card rounded-3xl p-6 flex flex-col justify-between space-y-4">
+
+                <div class="space-y-3">
+
+                    <div class="flex items-center justify-between">
+                        <span class="text-4xl">🕯️</span>
+                        <span class="bg-canary brutal-badge px-3 py-1 rounded-full text-xs font-black">
+                            Mission 02
+                        </span>
+                    </div>
+
+                    <h3 class="text-2xl font-black">
+                        The Wax Engineer
+                    </h3>
+
+                    <p class="text-xs font-black uppercase tracking-wider text-coral">
+                        Candle Making
+                    </p>
+
+                    <p class="text-sm font-bold text-gray-700">
+                        Explore phase changes from solid to liquid,
+                        melting points, and fragrance diffusion science.
+                    </p>
+
+                </div>
+
+                <div class="space-y-2">
+
+                    <div class="bg-lime p-3 brutal-border rounded-xl text-xs font-bold">
+                        🔥 <strong>What you explore:</strong>
+                        Thermal energy & phase state transitions.
+                    </div>
+
+                    <button onclick="openManualModal(2)"
+                            class="w-full py-2 bg-white brutal-btn rounded-xl text-xs font-black flex items-center justify-center gap-1 hover:bg-lime">
+                        📖 View Experiment Manual & Formula
+                    </button>
+
+                </div>
+            </div>
+
+            <div class="bg-white brutal-card rounded-3xl p-6 flex flex-col justify-between space-y-4">
+
+                <div class="space-y-3">
+
+                    <div class="flex items-center justify-between">
+                        <span class="text-4xl">🧼</span>
+                        <span class="bg-coral text-white brutal-badge px-3 py-1 rounded-full text-xs font-black">
+                            Mission 03
+                        </span>
+                    </div>
+
+                    <h3 class="text-2xl font-black">
+                        The Soap Scientist
+                    </h3>
+
+                    <p class="text-xs font-black uppercase tracking-wider text-teal">
+                        Soap Crafting
+                    </p>
+
+                    <p class="text-sm font-bold text-gray-700">
+                        Craft custom soap bars while understanding hydrophobic
+                        and hydrophilic surfactant molecules.
+                    </p>
+
+                </div>
+
+                <div class="space-y-2">
+
+                    <div class="bg-teal p-3 brutal-border rounded-xl text-xs font-bold">
+                        🫧 <strong>What you explore:</strong>
+                        Surfactants & cleansing chemistry.
+                    </div>
+
+                    <button onclick="openManualModal(3)"
+                            class="w-full py-2 bg-white brutal-btn rounded-xl text-xs font-black flex items-center justify-center gap-1 hover:bg-lime">
+                        📖 View Experiment Manual & Formula
+                    </button>
+
+                </div>
+            </div>
+
+            <div class="bg-white brutal-card rounded-3xl p-6 flex flex-col justify-between space-y-4">
+
+                <div class="space-y-3">
+
+                    <div class="flex items-center justify-between">
+                        <span class="text-4xl">💄</span>
+                        <span class="bg-violet text-white brutal-badge px-3 py-1 rounded-full text-xs font-black">
+                            Mission 04
+                        </span>
+                    </div>
+
+                    <h3 class="text-2xl font-black">
+                        The Balm Lab
+                    </h3>
+
+                    <p class="text-xs font-black uppercase tracking-wider text-coral">
+                        Lip Balm Lab
+                    </p>
+
+                    <p class="text-sm font-bold text-gray-700">
+                        Explore natural oil emulsification, lipid barriers,
+                        and protective skin science blends.
+                    </p>
+
+                </div>
+
+                <div class="space-y-2">
+
+                    <div class="bg-canary p-3 brutal-border rounded-xl text-xs font-bold">
+                        🌿 <strong>What you explore:</strong>
+                        Viscosity & lipid science.
+                    </div>
+
+                    <button onclick="openManualModal(4)"
+                            class="w-full py-2 bg-white brutal-btn rounded-xl text-xs font-black flex items-center justify-center gap-1 hover:bg-lime">
+                        📖 View Experiment Manual & Formula
+                    </button>
+
+                </div>
+            </div>
+
+            <div class="bg-white brutal-card rounded-3xl p-6 flex flex-col justify-between space-y-4">
+
+                <div class="space-y-3">
+
+                    <div class="flex items-center justify-between">
+                        <span class="text-4xl">🛁</span>
+                        <span class="bg-lime brutal-badge px-3 py-1 rounded-full text-xs font-black">
+                            Mission 05
+                        </span>
+                    </div>
+
+                    <h3 class="text-2xl font-black">
+                        The Fizz Lab
+                    </h3>
+
+                    <p class="text-xs font-black uppercase tracking-wider text-violet">
+                        Bath Bomb Science
+                    </p>
+
+                    <p class="text-sm font-bold text-gray-700">
+                        Formulate fizzy bath spheres while observing acid-base
+                        neutralization producing CO2 gas bubbles.
+                    </p>
+
+                </div>
+
+                <div class="space-y-2">
+
+                    <div class="bg-violet text-white p-3 brutal-border rounded-xl text-xs font-bold">
+                        ⚡ <strong>What you explore:</strong>
+                        Acid-base chemical reactions.
+                    </div>
+
+                    <button onclick="openManualModal(5)"
+                            class="w-full py-2 bg-white text-black brutal-btn rounded-xl text-xs font-black flex items-center justify-center gap-1 hover:bg-lime">
+                        📖 View Experiment Manual & Formula
+                    </button>
+
+                </div>
+            </div>
+
+            <div class="bg-canary brutal-card rounded-3xl p-6 flex flex-col justify-center items-center text-center space-y-4">
+
+                <div class="text-5xl">📜</div>
+
+                <h3 class="text-xl font-black">
+                    Included Mission Journal
+                </h3>
+
+                <p class="text-xs font-bold text-gray-800">
+                    Every box includes the master "How & Why It Works" guide
+                    + Printable Certificate of Discovery!
+                </p>
+
+                <button onclick="openAuthModal('join'); playSound('click');"
+                        class="px-6 py-2.5 bg-lime brutal-btn text-xs font-black rounded-xl">
+                    Get Full Box
+                </button>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Self Test Section -->
+    <section id="selftest"
+             class="py-20 bg-teal brutal-border border-x-0 border-y-4">
+
+        <div class="max-w-4xl mx-auto px-4">
+
+            <div class="text-center space-y-3 mb-10">
+
+                <span class="bg-white brutal-badge px-4 py-1.5 rounded-full text-xs uppercase font-extrabold">
+                    Interactive Quiz
+                </span>
+
+                <h2 class="text-3xl sm:text-5xl font-black">
+                    Test Your Curiosity First
+                </h2>
+
+                <p class="text-sm sm:text-base font-bold text-gray-800">
+                    Answer 3 quick questions to check your scientific mindset!
+                </p>
+
+            </div>
+
+            <div class="bg-white brutal-card rounded-3xl p-6 sm:p-10 space-y-8"
+                 id="quizContainer">
+
+                <div class="quiz-step space-y-4" id="q1">
+
+                    <span class="bg-canary brutal-badge px-3 py-1 rounded-full text-xs font-black">
+                        Question 1 of 3
+                    </span>
+
+                    <h3 class="text-xl sm:text-2xl font-black">
+                        When something doesn't work on your first try, what do you usually do?
+                    </h3>
+
+                    <div class="space-y-3 pt-2">
+
+                        <button onclick="answerQuiz(1, 'A'); playSound('click');"
+                                class="w-full text-left p-4 bg-cream brutal-btn rounded-xl text-sm font-bold hover:bg-canary">
+                            A. Give up and walk away
+                        </button>
+
+                        <button onclick="answerQuiz(1, 'B'); playSound('click');"
+                                class="w-full text-left p-4 bg-cream brutal-btn rounded-xl text-sm font-bold hover:bg-lime">
+                            B. Ask "Why did that happen?" and try again!
+                        </button>
+
+                        <button onclick="answerQuiz(1, 'C'); playSound('click');"
+                                class="w-full text-left p-4 bg-cream brutal-btn rounded-xl text-sm font-bold hover:bg-teal">
+                            C. Change one variable and re-test!
+                        </button>
+
+                    </div>
+                </div>
+
+                <div class="quiz-step space-y-4 hidden" id="q2">
+
+                    <span class="bg-lime brutal-badge px-3 py-1 rounded-full text-xs font-black">
+                        Question 2 of 3
+                    </span>
+
+                    <h3 class="text-xl sm:text-2xl font-black">
+                        How do you feel when you mix ingredients and see bubbling gas or growing crystals?
+                    </h3>
+
+                    <div class="space-y-3 pt-2">
+
+                        <button onclick="answerQuiz(2, 'A'); playSound('click');"
+                                class="w-full text-left p-4 bg-cream brutal-btn rounded-xl text-sm font-bold hover:bg-canary">
+                            A. Super excited to learn the science behind it!
+                        </button>
+
+                        <button onclick="answerQuiz(2, 'B'); playSound('click');"
+                                class="w-full text-left p-4 bg-cream brutal-btn rounded-xl text-sm font-bold hover:bg-coral hover:text-white">
+                            B. Neutral, it looks cool though.
+                        </button>
+
+                        <button onclick="answerQuiz(2, 'C'); playSound('click');"
+                                class="w-full text-left p-4 bg-cream brutal-btn rounded-xl text-sm font-bold hover:bg-violet hover:text-white">
+                            C. I want to build my own experiments right now!
+                        </button>
+
+                    </div>
+                </div>
+
+                <div class="quiz-step space-y-4 hidden" id="q3">
+
+                    <span class="bg-violet text-white brutal-badge px-3 py-1 rounded-full text-xs font-black">
+                        Question 3 of 3
+                    </span>
+
+                    <h3 class="text-xl sm:text-2xl font-black">
+                        Do you prefer spending time watching screens or creating real physical objects?
+                    </h3>
+
+                    <div class="space-y-3 pt-2">
+
+                        <button onclick="answerQuiz(3, 'A'); playSound('click');"
+                                class="w-full text-left p-4 bg-cream brutal-btn rounded-xl text-sm font-bold hover:bg-lime">
+                            A. I love hands-on building & making things!
+                        </button>
+
+                        <button onclick="answerQuiz(3, 'B'); playSound('click');"
+                                class="w-full text-left p-4 bg-cream brutal-btn rounded-xl text-sm font-bold hover:bg-canary">
+                            B. A mix of both!
+                        </button>
+
+                        <button onclick="answerQuiz(3, 'C'); playSound('click');"
+                                class="w-full text-left p-4 bg-cream brutal-btn rounded-xl text-sm font-bold hover:bg-teal">
+                            C. I want to reduce screen time and build real kits.
+                        </button>
+
+                    </div>
+                </div>
+
+                <div class="quiz-step space-y-4 hidden text-center" id="qResult">
+
+                    <div class="text-6xl animate-bounce">🏆</div>
+
+                    <span class="bg-lime brutal-badge px-4 py-1.5 rounded-full text-xs font-black">
+                        Scientist Mindset Confirmed
+                    </span>
+
+                    <h3 class="text-2xl sm:text-4xl font-black">
+                        You are a Natural Born Explorer! 🧪
+                    </h3>
+
+                    <p class="text-sm font-bold text-gray-700 max-w-lg mx-auto">
+                        Your curiosity score is 100%. You love observing,
+                        questioning, and building real things with your hands.
+                        The CurioBloom Science Kit is crafted specifically
+                        for curious minds like yours!
+                    </p>
+
+                    <div class="pt-4 flex justify-center gap-4 flex-wrap">
+
+                        <button onclick="openAuthModal('join'); playSound('victory');"
+                                class="px-8 py-4 bg-coral text-white brutal-btn rounded-2xl font-black text-sm">
+                            🌱 Claim Your Physical Kit (Save 25%)
+                        </button>
+
+                        <button onclick="resetQuiz()"
+                                class="px-6 py-4 bg-white text-black brutal-btn rounded-2xl font-black text-sm">
+                            🔄 Retake Quiz
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section id="reviews"
+             class="py-20 bg-cream border-t-4 border-black">
+
+        <div class="max-w-6xl mx-auto px-4">
+
+            <div class="text-center space-y-3 mb-12">
+
+                <span class="bg-lime brutal-badge px-4 py-1.5 rounded-full text-xs uppercase font-black">
+                    Verified Feedback
+                </span>
+
+                <h2 class="text-3xl sm:text-5xl font-black">
+                    What Parents & Explorers Say
+                </h2>
+
+                <p class="text-sm font-bold text-gray-700">
+                    Real feedback from real families who experienced CurioBloom.
+                </p>
+
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+
+                <div class="bg-white p-6 brutal-card rounded-3xl space-y-4 flex flex-col justify-between">
+
+                    <div class="space-y-3">
+
+                        <div class="flex items-center gap-1 text-coral text-lg">
+                            ⭐⭐⭐⭐⭐
+                        </div>
+
+                        <p class="text-xs sm:text-sm font-bold text-gray-800 leading-relaxed">
+                            "My 9-year-old son Aarav spent entire Sunday doing the crystal vault and fizz lab instead of playing games on iPad. The real science guide included is top notch!"
+                        </p>
+
+                    </div>
+
+                    <div class="flex items-center gap-3 border-t-2 border-black pt-3">
+
+                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=120&q=80"
+                             alt="Priya Sharma"
+                             class="w-10 h-10 rounded-full brutal-border object-cover">
+
+                        <div>
+                            <h4 class="font-black text-xs">
+                                Priya Sharma
+                            </h4>
+
+                            <p class="text-[10px] text-green-700 font-extrabold flex items-center gap-1">
+                                ✓ Verified Purchase • Delhi
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 brutal-card rounded-3xl space-y-4 flex flex-col justify-between">
+
+                    <div class="space-y-3">
+
+                        <div class="flex items-center gap-1 text-coral text-lg">
+                            ⭐⭐⭐⭐⭐
+                        </div>
+
+                        <p class="text-xs sm:text-sm font-bold text-gray-800 leading-relaxed">
+                            "The soap scientist kit was amazing! We made lavender scented leaf soaps. Love that it is 100% non-toxic and child safe."
+                        </p>
+
+                    </div>
+
+                    <div class="flex items-center gap-3 border-t-2 border-black pt-3">
+
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&q=80"
+                             alt="Rajesh K."
+                             class="w-10 h-10 rounded-full brutal-border object-cover">
+
+                        <div>
+                            <h4 class="font-black text-xs">
+                                Rajesh K.
+                            </h4>
+
+                            <p class="text-[10px] text-green-700 font-extrabold flex items-center gap-1">
+                                ✓ Verified Purchase • Bengaluru
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 brutal-card rounded-3xl space-y-4 flex flex-col justify-between">
+
+                    <div class="space-y-3">
+
+                        <div class="flex items-center gap-1 text-coral text-lg">
+                            ⭐⭐⭐⭐⭐
+                        </div>
+
+                        <p class="text-xs sm:text-sm font-bold text-gray-800 leading-relaxed">
+                            "The certificate feature with printable PNG and founders sign made my daughter feel like a real scientist. Super fast delivery!"
+                        </p>
+
+                    </div>
+
+                    <div class="flex items-center gap-3 border-t-2 border-black pt-3">
+
+                        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=120&q=80"
+                             alt="Ananya Gupta"
+                             class="w-10 h-10 rounded-full brutal-border object-cover">
+
+                        <div>
+                            <h4 class="font-black text-xs">
+                                Ananya Gupta
+                            </h4>
+
+                            <p class="text-[10px] text-green-700 font-extrabold flex items-center gap-1">
+                                ✓ Verified Purchase • Mumbai
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- About Creators Section -->
+    <section id="about"
+             class="py-20 px-4 max-w-5xl mx-auto">
+
+        <div class="bg-canary p-8 sm:p-12 brutal-card rounded-3xl">
+
+            <div class="grid md:grid-cols-12 gap-8 items-center">
+
+                <div class="md:col-span-5 text-center">
+
+                    <div class="relative inline-block w-48 h-48 sm:w-56 sm:h-56 bg-white brutal-border rounded-full overflow-hidden shadow-brutal">
+
+                        <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=80"
+                             alt="Lakshit Mishra & Vedik Raj Shekhar"
+                             class="w-full h-full object-cover">
+
+                    </div>
+                </div>
+
+                <div class="md:col-span-7 space-y-4">
+
+                    <span class="bg-white brutal-badge px-3 py-1 rounded-full text-xs font-black">
+                        The Creators
+                    </span>
+
+                    <h2 class="text-2xl sm:text-4xl font-black">
+                        Who is behind CurioBloom?
+                    </h2>
+
+                    <h3 class="text-lg font-black text-violet">
+                        Lakshit Mishra and Vedik Raj Shekhar
+                    </h3>
+
+                    <p class="text-xs font-black uppercase tracking-wider text-gray-700">
+                        Founders & Creators, CurioBloom
+                    </p>
+
+                    <p class="text-sm font-bold text-gray-800 leading-relaxed">
+                        "CurioBloom was born out of a simple observation:
+                        kids aren't naturally obsessed with screens; they are obsessed with discovery.
+                        Science becomes magnetic when children get to actually mix,
+                        experiment, observe, and build with their own hands."
+                    </p>
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq"
+             class="py-20 bg-cream brutal-border border-x-0 border-t-4">
+
+        <div class="max-w-4xl mx-auto px-4">
+
+            <div class="text-center space-y-3 mb-12">
+
+                <span class="bg-violet text-white brutal-badge px-4 py-1.5 rounded-full text-xs uppercase font-black">
+                    Got Questions?
+                </span>
+
+                <h2 class="text-3xl sm:text-5xl font-black">
+                    Frequently Asked Questions
+                </h2>
+
+            </div>
+
+            <div class="space-y-4" id="faqAccordion">
+
+                <div class="bg-white brutal-border rounded-2xl overflow-hidden">
+
+                    <button onclick="toggleFaq(1); playSound('click');"
+                            class="w-full p-5 text-left font-black text-base sm:text-lg flex justify-between items-center bg-canary">
+
+                        <span>Is CurioBloom only for kids?</span>
+                        <span id="faqIcon1" class="text-xl">+</span>
+
+                    </button>
+
+                    <div id="faqAns1"
+                         class="hidden p-5 text-xs sm:text-sm font-bold text-gray-700 border-t-2 border-black">
+
+                        While designed primarily for ages 7-14,
+                        adults and parents love participating in the experiments together
+                        as a family bonding experience!
+
+                    </div>
+                </div>
+
+                <div class="bg-white brutal-border rounded-2xl overflow-hidden">
+
+                    <button onclick="toggleFaq(2); playSound('click');"
+                            class="w-full p-5 text-left font-black text-base sm:text-lg flex justify-between items-center bg-white">
+
+                        <span>Is this a normal science kit?</span>
+                        <span id="faqIcon2" class="text-xl">+</span>
+
+                    </button>
+
+                    <div id="faqAns2"
+                         class="hidden p-5 text-xs sm:text-sm font-bold text-gray-700 border-t-2 border-black">
+
+                        No. CurioBloom combines hands-on product making
+                        (soaps, lip balms, candles, crystals)
+                        with structured mission-based reflection journals
+                        and scientific reasoning.
+
+                    </div>
+                </div>
+
+                <div class="bg-white brutal-border rounded-2xl overflow-hidden">
+
+                    <button onclick="toggleFaq(3); playSound('click');"
+                            class="w-full p-5 text-left font-black text-base sm:text-lg flex justify-between items-center bg-lime">
+
+                        <span>How many experiments are included?</span>
+                        <span id="faqIcon3" class="text-xl">+</span>
+
+                    </button>
+
+                    <div id="faqAns3"
+                         class="hidden p-5 text-xs sm:text-sm font-bold text-gray-700 border-t-2 border-black">
+
+                        Five complete hands-on activities are included inside every single box.
+
+                    </div>
+                </div>
+
+                <div class="bg-white brutal-border rounded-2xl overflow-hidden">
+
+                    <button onclick="toggleFaq(4); playSound('click');"
+                            class="w-full p-5 text-left font-black text-base sm:text-lg flex justify-between items-center bg-white">
+
+                        <span>Are the activities safe?</span>
+                        <span id="faqIcon4" class="text-xl">+</span>
+
+                    </button>
+
+                    <div id="faqAns4"
+                         class="hidden p-5 text-xs sm:text-sm font-bold text-gray-700 border-t-2 border-black">
+
+                        Yes! All materials are non-toxic, skin-safe,
+                        and designed specifically for home experimentation
+                        under basic adult supervision.
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white brutal-border border-x-0 border-b-0 border-t-4 py-12">
+
+        <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-4 gap-8">
+
+            <div class="space-y-3">
+
+                <div class="flex items-center gap-2">
+
+                    <div class="w-8 h-8 bg-lime brutal-border flex items-center justify-center text-black text-sm font-black">
+                        🌱
+                    </div>
+
+                    <span class="text-2xl font-black tracking-tight">
+                        CurioBloom
+                    </span>
+
+                </div>
+
+                <p class="text-xs font-bold text-gray-400">
+                    Where curiosity meets blooming.
+                </p>
+
+            </div>
+
+            <div>
+
+                <h4 class="font-black text-sm text-lime uppercase mb-3">
+                    Quick Links
+                </h4>
+
+                <ul class="space-y-2 text-xs font-bold text-gray-300">
+
+                    <li>
+                        <a href="#kit" class="hover:underline">
+                            The Kit
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#labSimulator" class="hover:underline">
+                            Virtual Lab
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#selftest" class="hover:underline">
+                            Self-Test Quiz
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div>
+
+                <h4 class="font-black text-sm text-canary uppercase mb-3">
+                    Support
+                </h4>
+
+                <ul class="space-y-2 text-xs font-bold text-gray-300">
+
+                    <li>
+                        <a href="#faq" class="hover:underline">
+                            FAQ
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#about" class="hover:underline">
+                            Creators
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div>
+
+                <h4 class="font-black text-sm text-coral uppercase mb-3">
+                    Join The Mission
+                </h4>
+
+                <button onclick="openAuthModal('join'); playSound('click');"
+                        class="px-4 py-2 bg-lime text-black brutal-btn text-xs font-black rounded-xl">
+                    Get Kit Today
+                </button>
+
+            </div>
+
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 pt-8 mt-8 border-t border-gray-800 text-center text-xs font-bold text-gray-500">
+            © 2026 CurioBloom. All rights reserved.
+            Created by Lakshit Mishra & Vedik Raj Shekhar.
+        </div>
+
+    </footer>
+
+    <!-- Auth & Checkout Modal -->
+    <div id="authModal"
+         class="fixed inset-0 z-50 hidden modal-overlay flex items-center justify-center p-4">
+
+        <div class="bg-cream brutal-border shadow-brutal-xl rounded-3xl w-full max-w-lg overflow-hidden relative max-h-[90vh] flex flex-col">
+
+            <button onclick="closeAuthModal()"
+                    class="absolute top-4 right-4 w-9 h-9 bg-white brutal-border rounded-full flex items-center justify-center font-black text-lg hover:bg-coral hover:text-white transition-colors z-10">
+                ✕
+            </button>
+
+            <div class="bg-canary p-6 brutal-border border-x-0 border-t-0 border-b-3 text-center space-y-1 flex-shrink-0">
+
+                <span class="text-2xl">🌱</span>
+
+                <h3 id="modalTitle" class="text-2xl font-black">
+                    Join CurioBloom
+                </h3>
+
+                <p id="modalSubtitle" class="text-xs font-bold text-gray-700">
+                    Step-by-step account & kit access
+                </p>
+
+            </div>
+
+            <div class="p-6 space-y-6 overflow-y-auto flex-grow">
+
+                <!-- STEP 1 -->
+                <div id="stepPhone" class="space-y-4">
+
+                    <span id="badgeStep1"
+                          class="bg-lime brutal-badge px-3 py-1 rounded-full text-xs font-black">
+                        Step 1: Phone Verification
+                    </span>
+
+                    <div>
+                        <label class="block text-xs font-black uppercase mb-1">
+                            Explorer Full Name
+                        </label>
+
+                        <input type="text"
+                               id="userNameInput"
+                               placeholder="e.g. Aarav Sharma"
+                               class="w-full p-3 brutal-border rounded-xl font-bold text-sm focus:outline-none bg-white">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-black uppercase mb-1">
+                            Mobile Number (with +91)
+                        </label>
+
+                        <input type="tel"
+                               id="phoneInput"
+                               placeholder="+919876543210"
+                               value="+91"
+                               class="w-full p-3.5 brutal-border rounded-xl font-bold text-sm focus:outline-none bg-white">
+                    </div>
+
+                    <div class="bg-canary p-3 brutal-border rounded-xl text-xs font-bold text-gray-800 space-y-1">
+
+                        <p class="font-extrabold flex items-center gap-1">
+                            ⚡ Real Firebase SMS Verification:
+                        </p>
+
+                        <p class="text-[11px]">
+                            Enter your 10-digit phone number.
+                            Firebase will send a real verification code to your phone.
+                        </p>
+
+                    </div>
+
+                    <div id="authStatus"
+                         class="text-xs font-black min-h-[1rem]">
+                    </div>
+
+                    <!-- Firebase reCAPTCHA -->
+                    <div id="recaptcha-container"></div>
+
+                    <button onclick="handleSendOTP()"
+                            class="w-full py-4 bg-lime brutal-btn rounded-xl font-black text-base">
+                        SEND VERIFICATION CODE 📲
+                    </button>
+
+                </div>
+
+                <!-- STEP 2 -->
+                <div id="stepOTP" class="hidden space-y-4">
+
+                    <span class="bg-canary brutal-badge px-3 py-1 rounded-full text-xs font-black">
+                        Step 2: Enter 6-Digit OTP
+                    </span>
+
+                    <div class="text-center space-y-1">
+
+                        <p class="text-xs font-bold text-gray-600">
+                            Code sent to
+                            <span id="displaySentPhone"
+                                  class="font-black text-black">
+                                +91...
+                            </span>
+                        </p>
+
+                    </div>
+
+                    <div>
+
+                        <label class="block text-xs font-black uppercase mb-1 text-center">
+                            Enter Verification Code
+                        </label>
+
+                        <input type="text"
+                               id="otpInput"
+                               placeholder="123456"
+                               maxlength="6"
+                               inputmode="numeric"
+                               autocomplete="one-time-code"
+                               class="w-full p-3.5 brutal-border rounded-xl font-bold text-center text-2xl tracking-widest focus:outline-none bg-white">
+
+                    </div>
+
+                    <div class="flex items-center justify-between text-xs font-bold">
+
+                        <span id="resendTimerText"
+                              class="text-gray-600">
+                            Resend code in
+                            <strong id="resendCountdown">30</strong>s
+                        </span>
+
+                        <button id="resendBtn"
+                                onclick="handleSendOTP()"
+                                disabled
+                                class="text-violet font-black underline disabled:opacity-40">
+                            Resend OTP
+                        </button>
+
+                    </div>
+
+                    <div id="otpStatus"
+                         class="text-xs font-black min-h-[1rem]">
+                    </div>
+
+                    <button onclick="handleVerifyOTP()"
+                            class="w-full py-4 bg-teal brutal-btn rounded-xl font-black text-base">
+                        VERIFY & CONTINUE 🚀
+                    </button>
+
+                </div>
+
+                <!-- LOGIN DONE -->
+                <div id="stepLoginDone"
+                     class="hidden text-center space-y-4">
+
+                    <div class="text-5xl">🎉</div>
+
+                    <span class="bg-lime brutal-badge px-3 py-1 rounded-full text-xs font-black">
+                        Successfully Logged In
+                    </span>
+
+                    <h3 class="text-2xl font-black">
+                        Welcome Back,
+                        <span id="welcomeUserName">Explorer</span>!
+                    </h3>
+
+                    <p class="text-xs font-bold text-gray-700">
+                        You are logged into your CurioBloom account.
+                        Access your science missions, track orders,
+                        or print certificates anytime!
+                    </p>
+
+                    <div class="pt-2 flex flex-col gap-2.5">
+
+                        <button onclick="openDashboardModal(); closeAuthModal()"
+                                class="w-full py-3.5 bg-canary brutal-btn rounded-xl font-black text-sm flex items-center justify-center gap-2">
+                            <span>👤 OPEN EXPLORER DASHBOARD</span>
+                        </button>
+
+                        <button onclick="closeAuthModal()"
+                                class="w-full py-3 bg-white brutal-btn rounded-xl font-black text-xs">
+                            EXPLORE WEBSITE
+                        </button>
+
+                        <button onclick="switchModeToOrder()"
+                                class="w-full py-3 bg-lime brutal-btn rounded-xl font-black text-xs">
+                            📦 ORDER A SCIENCE KIT (₹899)
+                        </button>
+
+                    </div>
+                </div>
+
+                <!-- STEP 3 -->
+                <div id="stepAddress"
+                     class="hidden space-y-3">
+
+                    <span class="bg-violet text-white brutal-badge px-3 py-1 rounded-full text-xs font-black">
+                        Step 3: Delivery Address
+                    </span>
+
+                    <div class="grid grid-cols-2 gap-2 text-left">
+
+                        <input type="text"
+                               id="custName"
+                               placeholder="Full Name"
+                               class="p-2.5 brutal-border rounded-lg text-xs font-bold bg-white">
+
+                        <input type="text"
+                               id="custFlat"
+                               placeholder="House/Flat No."
+                               class="p-2.5 brutal-border rounded-lg text-xs font-bold bg-white">
+
+                        <input type="text"
+                               id="custStreet"
+                               placeholder="Street / Area"
+                               class="p-2.5 brutal-border rounded-lg text-xs font-bold col-span-2 bg-white">
+
+                        <input type="text"
+                               id="custCity"
+                               placeholder="City"
+                               class="p-2.5 brutal-border rounded-lg text-xs font-bold bg-white">
+
+                        <input type="text"
+                               id="custPin"
+                               placeholder="PIN Code"
+                               class="p-2.5 brutal-border rounded-lg text-xs font-bold bg-white">
+
+                    </div>
+
+                    <button onclick="saveAddressAndNext()"
+                            class="w-full py-3.5 bg-lime brutal-btn rounded-xl font-black text-sm">
+                        SAVE ADDRESS & CHOOSE PAYMENT
+                    </button>
+
+                </div>
+
+                <!-- STEP 4 -->
+                <div id="stepConfirm"
+                     class="hidden text-center space-y-4">
+
+                    <span class="bg-coral text-white brutal-badge px-3 py-1 rounded-full text-xs font-black">
+                        Step 4: Real Payment & Order Confirmation
+                    </span>
+
+                    <div class="space-y-2 text-left">
+
+                        <label class="block text-xs font-black uppercase">
+                            Select Science Kit Package
+                        </label>
+
+                        <select id="kitPackageSelect"
+                                onchange="calculateOrderTotal()"
+                                class="w-full p-3 brutal-border rounded-xl font-bold text-xs bg-white focus:outline-none">
+
+                            <option value="899"
+                                    data-name="CurioBloom Single Kit (5-in-1)">
+                                CurioBloom 5-in-1 Single Kit — ₹899
+                            </option>
+
+                            <option value="1599"
+                                    data-name="CurioBloom Duo Explorer Pack (2 Kits)">
+                                CurioBloom Duo Explorer Pack (2 Boxes) — ₹1,599
+                            </option>
+
+                            <option value="2999"
+                                    data-name="CurioBloom Classroom Lab Pack (4 Kits)">
+                                CurioBloom Classroom Mega Lab (4 Boxes) — ₹2,999
+                            </option>
+
+                        </select>
+                    </div>
+
+                    <div class="bg-white p-4 brutal-border rounded-2xl text-left space-y-2 text-xs font-bold">
+
+                        <div class="flex justify-between border-b pb-2">
+
+                            <span id="selectedPackTitle">
+                                CurioBloom Single Kit (5-in-1)
+                            </span>
+
+                            <span id="selectedPackBasePrice"
+                                  class="font-black">
+                                ₹899
+                            </span>
+
+                        </div>
+
+                        <div class="flex justify-between border-b pb-2 text-gray-600">
+
+                            <span>Standard Express Shipping</span>
+
+                            <span class="text-green-600 font-black">
+                                FREE
+                            </span>
+
+                        </div>
+
+                        <div id="couponDiscountRow"
+                             class="hidden flex justify-between border-b pb-2 text-violet">
+
+                            <span>
+                                Discount Applied
+                                (<span id="discountCodeName">CURIO10</span>)
+                            </span>
+
+                            <span id="discountAmountText"
+                                  class="font-black">
+                                -₹90
+                            </span>
+
+                        </div>
+
+                        <div class="flex justify-between pt-1 text-sm font-black">
+
+                            <span>Total Payable Amount</span>
+
+                            <span id="finalOrderTotalText"
+                                  class="text-coral">
+                                ₹899
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <div class="flex gap-2">
+
+                        <input type="text"
+                               id="couponInput"
+                               placeholder="Enter Promo Code (e.g. CURIO10)"
+                               class="w-full p-2.5 brutal-border rounded-xl font-bold text-xs uppercase bg-white focus:outline-none">
+
+                        <button onclick="applyCouponCode()"
+                                class="px-4 py-2.5 bg-canary brutal-btn rounded-xl text-xs font-black">
+                            Apply
+                        </button>
+
+                    </div>
+
+                    <div class="space-y-2 text-left">
+
+                        <label class="block text-xs font-black uppercase">
+                            Choose Real Payment Option
+                        </label>
+
+                        <div onclick="selectPaymentMethod('upi')"
+                             id="payOptionUpi"
+                             class="p-3 bg-canary brutal-border rounded-xl cursor-pointer flex items-center justify-between font-extrabold text-xs">
+
+                            <span class="flex items-center gap-2">
+                                📱 Instant UPI Apps (GPay, PhonePe, Paytm)
+                            </span>
+
+                            <input type="radio"
+                                   name="payMethod"
+                                   value="upi"
+                                   checked>
+
+                        </div>
+
+                        <div onclick="selectPaymentMethod('qr')"
+                             id="payOptionQr"
+                             class="p-3 bg-white brutal-border rounded-xl cursor-pointer flex items-center justify-between font-extrabold text-xs">
+
+                            <span class="flex items-center gap-2">
+                                📷 Live Scannable UPI QR Code
+                            </span>
+
+                            <input type="radio"
+                                   name="payMethod"
+                                   value="qr">
+
+                        </div>
+
+                        <div onclick="selectPaymentMethod('whatsapp')"
+                             id="payOptionWa"
+                             class="p-3 bg-white brutal-border rounded-xl cursor-pointer flex items-center justify-between font-extrabold text-xs">
+
+                            <span class="flex items-center gap-2">
+                                💬 Order via WhatsApp Directly
+                            </span>
+
+                            <input type="radio"
+                                   name="payMethod"
+                                   value="whatsapp">
+
+                        </div>
+
+                        <div onclick="selectPaymentMethod('cod')"
+                             id="payOptionCod"
+                             class="p-3 bg-white brutal-border rounded-xl cursor-pointer flex items-center justify-between font-extrabold text-xs">
+
+                            <span class="flex items-center gap-2">
+                                💵 Cash on Delivery (COD)
+                            </span>
+
+                            <input type="radio"
+                                   name="payMethod"
+                                   value="cod">
+
+                        </div>
+
+                    </div>
+
+                    <div id="upiPayDetails"
+                         class="p-3 bg-lime brutal-border rounded-2xl space-y-2 text-center">
+
+                        <p class="text-xs font-extrabold">
+                            Tap below to open your mobile UPI app:
+                        </p>
+
+                        <div class="flex justify-center gap-2 flex-wrap">
+
+                            <a id="payBtnGenericUpi"
+                               href="#"
+                               target="_blank"
+                               class="px-4 py-2.5 bg-black text-white rounded-xl text-xs font-black flex items-center gap-1 hover:bg-gray-800">
+                                📱 Open UPI App Now
+                            </a>
+
+                            <button onclick="copyUpiId()"
+                                    class="px-3 py-2.5 bg-white text-black brutal-border rounded-xl text-xs font-black">
+                                📋 Copy UPI ID
+                            </button>
+
+                        </div>
+                    </div>
+
+                    <div id="qrPayDetails"
+                         class="hidden p-4 bg-white brutal-border rounded-2xl space-y-2 text-center">
+
+                        <p class="text-xs font-extrabold">
+                            Scan Dynamic UPI QR Code with any app:
+                        </p>
+
+                        <img id="dynamicUpiQrImg"
+                             src="https://placehold.co/200x200/000000/FFFFFF?text=UPI+QR"
+                             alt="Live UPI QR Code"
+                             class="mx-auto border-2 border-black rounded-lg w-48 h-48">
+
+                        <p class="text-[10px] font-black text-gray-700">
+                            UPI ID:
+                            <span id="displayUpiIdText"
+                                  class="underline">
+                                curiobloom@upi
+                            </span>
+                        </p>
+
+                    </div>
+
+                    <div id="waPayDetails"
+                         class="hidden p-3 bg-teal text-black brutal-border rounded-2xl space-y-2 text-center text-xs font-bold">
+
+                        <p>
+                            Orders details will be auto-formatted and sent directly
+                            to CurioBloom Official WhatsApp line!
+                        </p>
+
+                    </div>
+
+                    <button onclick="completeOrderReal()"
+                            class="w-full py-4 bg-coral text-white brutal-btn rounded-xl font-black text-base">
+                        PLACE ORDER NOW 🚀
+                    </button>
+
+                </div>
+
+                <!-- ORDER SUCCESS -->
+                <div id="stepOrderSuccess"
+                     class="hidden text-center space-y-4">
+
+                    <div class="text-6xl animate-bounce">
+                        📦🌱
+                    </div>
+
+                    <span class="bg-lime brutal-badge px-4 py-1.5 rounded-full text-xs font-black">
+                        Order Confirmed!
+                    </span>
+
+                    <h3 class="text-2xl font-black">
+                        Thank You for Joining!
+                    </h3>
+
+                    <p class="text-xs font-bold text-gray-700">
+                        Your CurioBloom kit is being packed!
+                        We have saved your tracking details in your Explorer Dashboard.
+                    </p>
+
+                    <div class="bg-white p-4 brutal-border rounded-2xl text-left text-xs font-bold space-y-1">
+
+                        <p class="text-gray-500">
+                            Order ID:
+                            <span id="confirmedOrderId"
+                                  class="font-black text-black">
+                                #CB-2026-8942
+                            </span>
+                        </p>
+
+                        <p class="text-gray-500">
+                            Estimated Delivery:
+                            <span class="font-black text-green-700">
+                                3-5 Business Days
+                            </span>
+                        </p>
+
+                    </div>
+
+                    <div class="flex flex-col gap-2 pt-2">
+
+                        <button onclick="openDashboardModal('orders'); closeAuthModal(); playSound('victory');"
+                                class="w-full py-3.5 bg-canary brutal-btn rounded-xl font-black text-xs">
+                            🚚 TRACK MY ORDER IN DASHBOARD
+                        </button>
+
+                        <button onclick="closeAuthModal()"
+                                class="w-full py-3 bg-lime brutal-btn rounded-xl font-black text-xs">
+                            BACK TO WEBSITE
+                        </button>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Explorer Dashboard Modal -->
+    <div id="dashboardModal"
+         class="fixed inset-0 z-50 hidden modal-overlay flex items-center justify-center p-4">
+
+        <div class="bg-cream brutal-border shadow-brutal-xl rounded-3xl w-full max-w-2xl overflow-hidden relative max-h-[90vh] flex flex-col">
+
+            <button onclick="closeDashboardModal()"
+                    class="absolute top-4 right-4 w-9 h-9 bg-white brutal-border rounded-full flex items-center justify-center font-black text-lg hover:bg-coral hover:text-white transition-colors z-10">
+                ✕
+            </button>
+
+            <div class="bg-lime p-6 brutal-border border-x-0 border-t-0 border-b-3 flex flex-col sm:flex-row items-center justify-between gap-4 flex-shrink-0">
+
+                <div class="flex items-center gap-3">
+
+                    <div class="w-12 h-12 bg-white brutal-border rounded-full flex items-center justify-center text-2xl font-black">
+                        🧪
+                    </div>
+
+                    <div>
+
+                        <h3 class="text-2xl font-black text-left"
+                            id="dashHeaderName">
+                            Explorer's Lab
+                        </h3>
+
+                        <p class="text-xs font-bold text-gray-800"
+                           id="dashHeaderPhone">
+                            +91 User
+                        </p>
+
+                    </div>
+                </div>
+
+                <div class="bg-canary brutal-badge px-3 py-1.5 rounded-xl text-xs font-extrabold flex items-center gap-2">
+
+                    <span>🏆 Completed:</span>
+
+                    <span id="completedMissionsCount"
+                          class="bg-black text-lime px-2 py-0.5 rounded">
+                        0 / 5
+                    </span>
+
+                </div>
+            </div>
+
+            <div class="flex border-b-3 border-black bg-white font-black text-xs">
+
+                <button onclick="switchDashTab('missions')"
+                        id="tabBtnMissions"
+                        class="flex-1 py-3 px-2 text-center bg-canary border-r-2 border-black hover:bg-canary">
+                    🧪 Missions & Journal
+                </button>
+
+                <button onclick="switchDashTab('certificate')"
+                        id="tabBtnCertificate"
+                        class="flex-1 py-3 px-2 text-center hover:bg-canary border-r-2 border-black">
+                    📜 Certificate
+                </button>
+
+                <button onclick="switchDashTab('orders')"
+                        id="tabBtnOrders"
+                        class="flex-1 py-3 px-2 text-center hover:bg-canary">
+                    📦 My Orders
+                </button>
+
+            </div>
+
+            <div class="p-6 overflow-y-auto flex-grow space-y-6">
+
+                <div id="dashMissionsTab"
+                     class="space-y-4">
+
+                    <div class="bg-canary p-3 brutal-border rounded-xl text-xs font-bold flex justify-between items-center">
+
+                        <span>
+                            🧪 Perform experiments at home and write your lab notes below!
+                        </span>
+
+                    </div>
+
+                    <div class="space-y-3"
+                         id="missionsListContainer">
+                    </div>
+
+                </div>
+
+                <div id="dashCertificateTab"
+                     class="hidden space-y-4 text-center">
+
+                    <div id="printableCertificateArea"
+                         class="bg-white p-6 brutal-card rounded-3xl border-4 border-black text-center space-y-4 relative overflow-hidden bg-gradient-to-b from-cream to-canary">
+
+                        <div class="absolute -top-6 -right-6 text-7xl opacity-20 pointer-events-none">
+                            🏆
+                        </div>
+
+                        <div class="inline-flex items-center gap-2 bg-lime brutal-badge px-4 py-1 rounded-full text-xs uppercase font-black">
+
+                            <span>
+                                🌱 CurioBloom Science Academy
+                            </span>
+
+                        </div>
+
+                        <h2 class="text-3xl font-black tracking-tight text-gray-900">
+                            CERTIFICATE OF CURIOSITY
+                        </h2>
+
+                        <p class="text-xs font-bold uppercase text-gray-600">
+                            This Official Certificate Is Awarded To
+                        </p>
+
+                        <div class="text-2xl sm:text-3xl font-black text-violet underline decoration-coral decoration-4 py-1"
+                             id="certUserName">
+                            Aarav Sharma
+                        </div>
+
+                        <p class="text-xs font-bold text-gray-700 max-w-md mx-auto">
+                            For demonstrating exceptional curiosity,
+                            scientific observation, and completing hands-on
+                            chemistry & physical science experiments.
+                        </p>
+
+                        <div class="flex items-center justify-around pt-4 border-t-2 border-black text-xs font-black">
+
+                            <div>
+
+                                <p class="text-[10px] text-gray-500 uppercase">
+                                    Verification ID
+                                </p>
+
+                                <p id="certVerificationId">
+                                    CB-CERT-2026-001
+                                </p>
+
+                            </div>
+
+                            <div class="w-12 h-12 bg-lime brutal-border rounded-full flex items-center justify-center text-lg shadow-brutal">
+                                🌿
+                            </div>
+
+                            <div>
+
+                                <p class="text-[10px] text-gray-500 uppercase">
+                                    Founders Signature
+                                </p>
+
+                                <p class="font-serif italic text-sm">
+                                    Lakshit & Vedik
+                                </p>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="flex justify-center gap-3 flex-wrap">
+
+                        <button onclick="downloadCertificatePNG(); playSound('victory');"
+                                class="px-6 py-3 bg-violet text-white brutal-btn rounded-xl font-black text-xs flex items-center justify-center gap-2">
+                            <span>🖼️ Download Certificate PNG</span>
+                        </button>
+
+                        <button onclick="printCertificate()"
+                                class="px-6 py-3 bg-lime brutal-btn rounded-xl font-black text-xs flex items-center justify-center gap-2">
+                            <span>🖨️ Print Certificate</span>
+                        </button>
+
+                    </div>
+                </div>
+
+                <div id="dashOrdersTab"
+                     class="hidden space-y-4">
+
+                    <div id="userOrdersList"
+                         class="space-y-4">
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Manual / Experiment Details Modal -->
+    <div id="manualModal"
+         class="fixed inset-0 z-50 hidden modal-overlay flex items-center justify-center p-4">
+
+        <div class="bg-cream brutal-border shadow-brutal-xl rounded-3xl w-full max-w-xl overflow-hidden relative max-h-[90vh] flex flex-col">
+
+            <button onclick="closeManualModal()"
+                    class="absolute top-4 right-4 w-9 h-9 bg-white brutal-border rounded-full flex items-center justify-center font-black text-lg hover:bg-coral hover:text-white transition-colors z-10">
+                ✕
+            </button>
+
+            <div class="bg-canary p-6 brutal-border border-x-0 border-t-0 border-b-3 text-center space-y-1 flex-shrink-0">
+
+                <span class="text-3xl"
+                      id="manualIcon">
+                    💎
+                </span>
+
+                <h3 id="manualTitle"
+                    class="text-2xl font-black">
+                    Experiment Manual
+                </h3>
+
+                <p id="manualSubtitle"
+                   class="text-xs font-bold text-gray-700">
+                    Scientific principles & step-by-step experiment guide
+                </p>
+
+            </div>
+
+            <div class="p-6 space-y-4 overflow-y-auto flex-grow text-xs font-bold text-gray-800">
+
+                <div class="bg-lime p-3.5 brutal-border rounded-2xl space-y-1">
+
+                    <h4 class="font-black text-xs uppercase text-black">
+                        🔬 Real Chemical Formula / Scientific Law:
+                    </h4>
+
+                    <p id="manualFormula"
+                       class="font-mono text-sm text-black font-extrabold bg-white p-2 rounded-lg brutal-border">
+                        NaHCO₃ + C₆H₈O₇ ➔ CO₂ + H₂O + Na₃C₆H₅O₇
+                    </p>
+
+                </div>
+
+                <div class="space-y-2">
+
+                    <h4 class="font-black text-xs uppercase text-violet">
+                        📦 Materials Included In Kit:
+                    </h4>
+
+                    <ul id="manualMaterials"
+                        class="list-disc list-inside space-y-1 bg-white p-3 rounded-xl brutal-border text-gray-700">
+
+                        <li>Citric Acid Crystals (Non-Toxic)</li>
+                        <li>Sodium Bicarbonate Powder</li>
+                        <li>Measuring Flask & Beaker</li>
+
+                    </ul>
+                </div>
+
+                <div class="space-y-2">
+
+                    <h4 class="font-black text-xs uppercase text-coral">
+                        🧪 Step-by-Step Procedure:
+                    </h4>
+
+                    <ol id="manualSteps"
+                        class="list-decimal list-inside space-y-2 bg-white p-3 rounded-xl brutal-border text-gray-800">
+
+                        <li>Measure 20ml of distilled water into the beaker.</li>
+                        <li>Add 2 scoops of Baking Soda and stir until dissolved.</li>
+                        <li>Pour 1 scoop of Citric Acid and observe immediate CO2 bubbling!</li>
+
+                    </ol>
+
+                </div>
+
+                <div class="bg-canary p-3 brutal-border rounded-xl flex items-center justify-between">
+
+                    <span>
+                        🛡️ Safety Rating:
+                        <strong>100% Non-Toxic & Skin Safe</strong>
+                    </span>
+
+                    <button onclick="closeManualModal(); openAuthModal('join');"
+                            class="px-3 py-1 bg-lime text-black brutal-btn rounded-lg text-[10px] font-black">
+                        Get Physical Kit
+                    </button>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Application JavaScript Logic -->
+    <script>
+
+        /* =========================================================
+           GLOBAL VARIABLES
+        ========================================================= */
+
+        let currentAuthMode = 'join';
+        let currentUser = null;
+
+        /* REAL FIREBASE AUTH VARIABLES */
+        let confirmationResult = null;
+        let recaptchaVerifier = null;
+        let firebaseUser = null;
+
+        let countdownTimerInterval = null;
+        let selectedPaymentType = 'upi';
+        let activeAppliedCoupon = null;
+        let currentPackagePrice = 899;
+
+        /* =========================================================
+           SOUND EFFECTS
+        ========================================================= */
+
+        let audioCtx = null;
+
+        function initAudio() {
+
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+
+        }
+
+        function playSound(type) {
+
+            try {
+
+                initAudio();
+
+                if (!audioCtx) return;
+
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                const now = audioCtx.currentTime;
+
+                if (type === 'click') {
+
+                    osc.type = 'sine';
+
+                    osc.frequency.setValueAtTime(400, now);
+                    osc.frequency.exponentialRampToValueAtTime(800, now + 0.08);
+
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.linearRampToValueAtTime(0, now + 0.08);
+
+                    osc.start(now);
+                    osc.stop(now + 0.08);
+
+                } else if (type === 'fizz') {
+
+                    osc.type = 'triangle';
+
+                    osc.frequency.setValueAtTime(200, now);
+                    osc.frequency.exponentialRampToValueAtTime(600, now + 0.3);
+
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.linearRampToValueAtTime(0, now + 0.3);
+
+                    osc.start(now);
+                    osc.stop(now + 0.3);
+
+                } else if (type === 'victory') {
+
+                    const freqs = [523.25, 659.25, 783.99, 1046.50];
+
+                    freqs.forEach((f, idx) => {
+
+                        const o = audioCtx.createOscillator();
+                        const g = audioCtx.createGain();
+
+                        o.connect(g);
+                        g.connect(audioCtx.destination);
+
+                        o.type = 'sine';
+
+                        o.frequency.setValueAtTime(
+                            f,
+                            now + idx * 0.1
+                        );
+
+                        g.gain.setValueAtTime(
+                            0.15,
+                            now + idx * 0.1
+                        );
+
+                        g.gain.linearRampToValueAtTime(
+                            0,
+                            now + idx * 0.1 + 0.2
+                        );
+
+                        o.start(now + idx * 0.1);
+                        o.stop(now + idx * 0.1 + 0.2);
+
+                    });
+                }
+
+            } catch (e) {}
+
+        }
+
+        /* =========================================================
+           MISSIONS
+        ========================================================= */
+
+        const defaultMissions = [
+
+            {
+                id: 1,
+                title: 'The Crystal Vault',
+                type: 'Crystal Growing',
+                icon: '💎',
+                color: 'bg-teal',
+                completed: false,
+                note: ''
+            },
+
+            {
+                id: 2,
+                title: 'The Wax Engineer',
+                type: 'Candle Crafting',
+                icon: '🕯️',
+                color: 'bg-canary',
+                completed: false,
+                note: ''
+            },
+
+            {
+                id: 3,
+                title: 'The Soap Scientist',
+                type: 'Soap Making',
+                icon: '🧼',
+                color: 'bg-lime',
+                completed: false,
+                note: ''
+            },
+
+            {
+                id: 4,
+                title: 'The Balm Lab',
+                type: 'Lip Balm Science',
+                icon: '💄',
+                color: 'bg-violet text-white',
+                completed: false,
+                note: ''
+            },
+
+            {
+                id: 5,
+                title: 'The Fizz Lab',
+                type: 'Bath Bomb Chemistry',
+                icon: '🛁',
+                color: 'bg-coral text-white',
+                completed: false,
+                note: ''
+            }
+
+        ];
+
+        /* =========================================================
+           PAGE LOAD + FIREBASE AUTH STATE
+        ========================================================= */
+
+        window.addEventListener('load', () => {
+
+            const saved = localStorage.getItem('curiobloom_user');
+
+            if (saved) {
+
+                try {
+
+                    currentUser = JSON.parse(saved);
+
+                } catch (e) {
+
+                    currentUser = null;
+
+                }
+
+            }
+
+            firebaseAuth.onAuthStateChanged(function(user) {
+
+                if (user) {
+
+                    firebaseUser = user;
+
+                    if (currentUser) {
+
+                        currentUser.uid = user.uid;
+                        currentUser.phone = user.phoneNumber || currentUser.phone;
+
+                        saveUserData();
+
+                        updateLoggedInUI(
+                            currentUser.phone,
+                            currentUser.name
+                        );
+
+                    }
+
+                } else {
+
+                    firebaseUser = null;
+
+                }
+
+            });
+
+            if (currentUser) {
+
+                updateLoggedInUI(
+                    currentUser.phone,
+                    currentUser.name
+                );
+
+            }
+
+            runIntroProgressAnimation();
+            initLabCanvas();
+
+        });
+
+        /* =========================================================
+           INTRO ANIMATION
+        ========================================================= */
+
+        function runIntroProgressAnimation() {
+
+            let progress = 0;
+
+            const progressBar =
+                document.getElementById('introProgress');
+
+            const percentText =
+                document.getElementById('introPercent');
+
+            const statusText =
+                document.getElementById('introStatusText');
+
+            const steps = [
+                'Preparing lab equipment...',
+                'Mixing curious ideas...',
+                'Checking crystal growth...',
+                'Ready for discovery!'
+            ];
+
+            const interval = setInterval(() => {
+
+                progress += 25;
+
+                if (progressBar)
+                    progressBar.style.width = progress + '%';
+
+                if (percentText)
+                    percentText.textContent = progress + '%';
+
+                if (statusText) {
+
+                    statusText.textContent =
+                        steps[
+                            Math.min(
+                                Math.floor(progress / 25),
+                                steps.length - 1
+                            )
+                        ];
+
+                }
+
+                if (progress >= 100) {
+
+                    clearInterval(interval);
+
+                }
+
+            }, 300);
+
+        }
+
+        function hideIntroOverlay() {
+
+            const overlay =
+                document.getElementById('openingIntro');
+
+            if (overlay) {
+
+                overlay.classList.add(
+                    'opacity-0',
+                    'pointer-events-none'
+                );
+
+                setTimeout(() => {
+                    overlay.remove();
+                }, 700);
+
+            }
+
+        }
+
+        function replayIntro() {
+
+            location.reload();
+
+        }
+
+        /* =========================================================
+           MOBILE MENU
+        ========================================================= */
+
+        function toggleMobileMenu() {
+
+            document
+                .getElementById('mobileMenu')
+                .classList.toggle('hidden');
+
+        }
+
+        /* =========================================================
+           TOAST
+        ========================================================= */
+
+        function showToast(
+            msg,
+            bg = 'bg-dark text-white'
+        ) {
+
+            const container =
+                document.getElementById('toastContainer');
+
+            if (!container) return;
+
+            const toast =
+                document.createElement('div');
+
+            toast.className =
+                `p-3.5 brutal-border rounded-xl font-black text-xs shadow-brutal pointer-events-auto transition-all ${bg}`;
+
+            toast.textContent = msg;
+
+            container.appendChild(toast);
+
+            setTimeout(() => {
+
+                toast.classList.add(
+                    'opacity-0',
+                    'scale-95'
+                );
+
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+
+            }, 3000);
+
+        }
+
+        /* =========================================================
+           AUTH MODAL
+        ========================================================= */
+
+        function openAuthModal(mode) {
+
+            currentAuthMode = mode || 'join';
+
+            document
+                .getElementById('authModal')
+                .classList.remove('hidden');
+
+            document
+                .getElementById('stepPhone')
+                .classList.remove('hidden');
+
+            document
+                .getElementById('stepOTP')
+                .classList.add('hidden');
+
+            document
+                .getElementById('stepLoginDone')
+                .classList.add('hidden');
+
+            document
+                .getElementById('stepAddress')
+                .classList.add('hidden');
+
+            document
+                .getElementById('stepConfirm')
+                .classList.add('hidden');
+
+            document
+                .getElementById('stepOrderSuccess')
+                .classList.add('hidden');
+
+            document
+                .getElementById('otpInput')
+                .value = '';
+
+            document
+                .getElementById('otpStatus')
+                .textContent = '';
+
+            document
+                .getElementById('authStatus')
+                .textContent = '';
+
+            if (currentAuthMode === 'login') {
+
+                document
+                    .getElementById('modalTitle')
+                    .textContent = 'Account Login';
+
+                document
+                    .getElementById('modalSubtitle')
+                    .textContent =
+                    'Log in to view account & missions';
+
+                document
+                    .getElementById('badgeStep1')
+                    .textContent =
+                    'Step 1: Enter Phone Number';
+
+            } else {
+
+                document
+                    .getElementById('modalTitle')
+                    .textContent =
+                    'Get Your CurioBloom Kit';
+
+                document
+                    .getElementById('modalSubtitle')
+                    .textContent =
+                    'Step-by-step kit order flow';
+
+                document
+                    .getElementById('badgeStep1')
+                    .textContent =
+                    'Step 1: Phone Verification';
+
+            }
+
+        }
+
+        function closeAuthModal() {
+
+            document
+                .getElementById('authModal')
+                .classList.add('hidden');
+
+        }
+
+        function switchModeToOrder() {
+
+            currentAuthMode = 'join';
+
+            document
+                .getElementById('modalTitle')
+                .textContent =
+                'Get Your CurioBloom Kit';
+
+            document
+                .getElementById('modalSubtitle')
+                .textContent =
+                'Step-by-step kit order flow';
+
+            document
+                .getElementById('stepLoginDone')
+                .classList.add('hidden');
+
+            document
+                .getElementById('stepAddress')
+                .classList.remove('hidden');
+
+        }
+
+        /* =========================================================
+           REAL FIREBASE PHONE OTP
+        ========================================================= */
+
+        function handleSendOTP() {
+
+            playSound('click');
+
+            const phone =
+                document
+                    .getElementById('phoneInput')
+                    .value
+                    .trim();
+
+            const status =
+                document.getElementById('authStatus');
+
+            const digitsOnly =
+                phone.replace(/\D/g, '');
+
+            if (
+                !phone.startsWith('+91') ||
+                digitsOnly.length !== 12
+            ) {
+
+                status.style.color = 'red';
+
+                status.textContent =
+                    'Please enter a valid 10-digit Indian phone number with +91.';
+
+                return;
+
+            }
+
+            status.style.color = 'black';
+
+            status.textContent =
+                'Preparing secure verification...';
+
+            try {
+
+                if (!recaptchaVerifier) {
+
+                    recaptchaVerifier =
+                        new firebase.auth.RecaptchaVerifier(
+                            'recaptcha-container',
+                            {
+                                size: 'invisible',
+
+                                callback: function() {
+                                    // reCAPTCHA completed
+                                },
+
+                                'expired-callback': function() {
+
+                                    status.style.color = 'red';
+
+                                    status.textContent =
+                                        'reCAPTCHA expired. Please try again.';
+
+                                    if (recaptchaVerifier) {
+
+                                        recaptchaVerifier.clear();
+                                        recaptchaVerifier = null;
+
+                                    }
+
+                                }
+                            }
+                        );
+
+                    recaptchaVerifier.render();
+
+                }
+
+                firebaseAuth
+                    .signInWithPhoneNumber(
+                        phone,
+                        recaptchaVerifier
+                    )
+                    .then(function(result) {
+
+                        confirmationResult = result;
+
+                        document
+                            .getElementById('stepPhone')
+                            .classList.add('hidden');
+
+                        document
+                            .getElementById('stepOTP')
+                            .classList.remove('hidden');
+
+                        document
+                            .getElementById('displaySentPhone')
+                            .textContent = phone;
+
+                        status.textContent = '';
+
+                        showToast(
+                            '📲 Verification code sent to your phone!',
+                            'bg-lime text-black'
+                        );
+
+                        startResendCountdown();
+
+                    })
+                    .catch(function(error) {
+
+                        console.error(
+                            'Firebase OTP Error:',
+                            error
+                        );
+
+                        status.style.color = 'red';
+
+                        if (
+                            error.code ===
+                            'auth/invalid-phone-number'
+                        ) {
+
+                            status.textContent =
+                                'Invalid phone number.';
+
+                        } else if (
+                            error.code ===
+                            'auth/too-many-requests'
+                        ) {
+
+                            status.textContent =
+                                'Too many attempts. Please try again later.';
+
+                        } else if (
+                            error.code ===
+                            'auth/quota-exceeded'
+                        ) {
+
+                            status.textContent =
+                                'SMS quota exceeded. Please try again later.';
+
+                        } else if (
+                            error.code ===
+                            'auth/operation-not-allowed'
+                        ) {
+
+                            status.textContent =
+                                'Phone authentication is not enabled in Firebase Console.';
+
+                        } else {
+
+                            status.textContent =
+                                error.message ||
+                                'Unable to send OTP.';
+
+                        }
+
+                        if (recaptchaVerifier) {
+
+                            recaptchaVerifier.clear();
+                            recaptchaVerifier = null;
+
+                        }
+
+                    });
+
+            } catch (error) {
+
+                console.error(error);
+
+                status.style.color = 'red';
+
+                status.textContent =
+                    'Firebase authentication could not be initialized.';
+
+            }
+
+        }
+
+        /* =========================================================
+           OTP COUNTDOWN
+        ========================================================= */
+
+        function startResendCountdown() {
+
+            let count = 30;
+
+            const btn =
+                document.getElementById('resendBtn');
+
+            const countdownSpan =
+                document.getElementById('resendCountdown');
+
+            const timerText =
+                document.getElementById('resendTimerText');
+
+            btn.disabled = true;
+
+            countdownSpan.textContent = count;
+
+            timerText.innerHTML =
+                'Resend code in <strong id="resendCountdown">30</strong>s';
+
+            if (countdownTimerInterval)
+                clearInterval(countdownTimerInterval);
+
+            countdownTimerInterval =
+                setInterval(() => {
+
+                    count--;
+
+                    const span =
+                        document.getElementById(
+                            'resendCountdown'
+                        );
+
+                    if (span)
+                        span.textContent = count;
+
+                    if (count <= 0) {
+
+                        clearInterval(
+                            countdownTimerInterval
+                        );
+
+                        btn.disabled = false;
+
+                        timerText.textContent =
+                            'Did not receive code?';
+
+                    }
+
+                }, 1000);
+
+        }
+
+        /* =========================================================
+           REAL FIREBASE OTP VERIFICATION
+        ========================================================= */
+
+        function handleVerifyOTP() {
+
+            playSound('click');
+
+            const code =
+                document
+                    .getElementById('otpInput')
+                    .value
+                    .trim();
+
+            const phone =
+                document
+                    .getElementById('phoneInput')
+                    .value
+                    .trim();
+
+            const name =
+                document
+                    .getElementById('userNameInput')
+                    .value
+                    .trim() ||
+                'Explorer';
+
+            const status =
+                document.getElementById('otpStatus');
+
+            if (
+                code.length !== 6 ||
+                !/^\d{6}$/.test(code)
+            ) {
+
+                status.style.color = 'red';
+
+                status.textContent =
+                    'Enter the 6-digit verification code.';
+
+                return;
+
+            }
+
+            if (!confirmationResult) {
+
+                status.style.color = 'red';
+
+                status.textContent =
+                    'Please request a new verification code.';
+
+                return;
+
+            }
+
+            status.style.color = 'black';
+
+            status.textContent =
+                'Verifying your code...';
+
+            confirmationResult
+                .confirm(code)
+                .then(function(result) {
+
+                    firebaseUser = result.user;
+
+                    status.textContent = '';
+
+                    const firebasePhone =
+                        firebaseUser.phoneNumber ||
+                        phone;
+
+                    if (!currentUser) {
+
+                        currentUser = {
+
+                            uid: firebaseUser.uid,
+
+                            phone: firebasePhone,
+
+                            name: name,
+
+                            missions:
+                                JSON.parse(
+                                    JSON.stringify(
+                                        defaultMissions
+                                    )
+                                ),
+
+                            orders: []
+
+                        };
+
+                    } else {
+
+                        currentUser.uid =
+                            firebaseUser.uid;
+
+                        currentUser.name =
+                            name;
+
+                        currentUser.phone =
+                            firebasePhone;
+
+                        if (!currentUser.missions) {
+
+                            currentUser.missions =
+                                JSON.parse(
+                                    JSON.stringify(
+                                        defaultMissions
+                                    )
+                                );
+
+                        }
+
+                        if (!currentUser.orders) {
+
+                            currentUser.orders = [];
+
+                        }
+
+                    }
+
+                    saveUserData();
+
+                    updateLoggedInUI(
+                        firebasePhone,
+                        name
+                    );
+
+                    if (currentAuthMode === 'login') {
+
+                        document
+                            .getElementById('stepOTP')
+                            .classList.add('hidden');
+
+                        document
+                            .getElementById('stepLoginDone')
+                            .classList.remove('hidden');
+
+                        document
+                            .getElementById('welcomeUserName')
+                            .textContent = name;
+
+                        playSound('victory');
+
+                        showToast(
+                            '👋 Welcome back, ' + name + '!',
+                            'bg-lime text-black'
+                        );
+
+                    } else {
+
+                        document
+                            .getElementById('stepOTP')
+                            .classList.add('hidden');
+
+                        document
+                            .getElementById('stepAddress')
+                            .classList.remove('hidden');
+
+                        document
+                            .getElementById('custName')
+                            .value = name;
+
+                    }
+
+                    confirmationResult = null;
+
+                })
+                .catch(function(error) {
+
+                    console.error(
+                        'Firebase OTP Verification Error:',
+                        error
+                    );
+
+                    status.style.color = 'red';
+
+                    if (
+                        error.code ===
+                        'auth/invalid-verification-code'
+                    ) {
+
+                        status.textContent =
+                            'Incorrect verification code. Please try again.';
+
+                    } else if (
+                        error.code ===
+                        'auth/code-expired'
+                    ) {
+
+                        status.textContent =
+                            'This verification code has expired. Please request a new one.';
+
+                    } else {
+
+                        status.textContent =
+                            error.message ||
+                            'Verification failed.';
+
+                    }
+
+                });
+
+        }
+
+        /* =========================================================
+           ADDRESS
+        ========================================================= */
+
+        function saveAddressAndNext() {
+
+            playSound('click');
+
+            const name =
+                document
+                    .getElementById('custName')
+                    .value
+                    .trim();
+
+            const flat =
+                document
+                    .getElementById('custFlat')
+                    .value
+                    .trim();
+
+            const street =
+                document
+                    .getElementById('custStreet')
+                    .value
+                    .trim();
+
+            const city =
+                document
+                    .getElementById('custCity')
+                    .value
+                    .trim();
+
+            const pin =
+                document
+                    .getElementById('custPin')
+                    .value
+                    .trim();
+
+            if (!name || !street || !city || !pin) {
+
+                showToast(
+                    'Please fill all address fields!',
+                    'bg-coral text-white'
+                );
+
+                return;
+
+            }
+
+            setupRealUpiLinks(
+                name,
+                pin
+            );
+
+            document
+                .getElementById('stepAddress')
+                .classList.add('hidden');
+
+            document
+                .getElementById('stepConfirm')
+                .classList.remove('hidden');
+
+        }
+
+        /* =========================================================
+           PAYMENT
+        ========================================================= */
+
+        function selectPaymentMethod(type) {
+
+            playSound('click');
+
+            selectedPaymentType = type;
+
+            document.getElementById('payOptionUpi').className =
+                type === 'upi'
+                    ? 'p-3 bg-canary brutal-border rounded-xl cursor-pointer flex items-center justify-between font-extrabold text-xs'
+                    : 'p-3 bg-white brutal-border rounded-xl cursor-pointer flex items-center justify-between font-extrabold text-xs';
+
+            document.getElementById('payOptionQr').className =
+                type === 'qr'
+                    ? 'p-3 bg-canary brutal-border rounded-xl cursor-pointer flex items-center justify-between font-extrabold text-xs'
+                    : 'p-3 bg-white brutal-border rounded-xl cursor-pointer flex items-center justify-between font-extrabold text-xs';
+
+            document.getElementById('payOptionWa').className =
+                type === 'whatsapp'
+                    ? 'p-3 bg-canary brutal-border rounded-xl cursor-pointer flex items-center justify-between font-extrabold text-xs'
+                    : 'p-3 bg-white brutal-border rounded-xl cursor-pointer flex items-center justify-between font-extrabold text-xs';
+
+            document.getElementById('payOptionCod').className =
+                type === 'cod'
+                    ? 'p-3 bg-canary brutal-border rounded-xl cursor-pointer flex items-center justify-between font-extrabold text-xs'
+                    : 'p-3 bg-white brutal-border rounded-xl cursor-pointer flex items-center justify-between font-extrabold text-xs';
+
+            document
+                .getElementById('upiPayDetails')
+                .classList.toggle(
+                    'hidden',
+                    type !== 'upi'
+                );
+
+            document
+                .getElementById('qrPayDetails')
+                .classList.toggle(
+                    'hidden',
+                    type !== 'qr'
+                );
+
+            document
+                .getElementById('waPayDetails')
+                .classList.toggle(
+                    'hidden',
+                    type !== 'whatsapp'
+                );
+
+        }
+
+        /* =========================================================
+           ORDER
+        ========================================================= */
+
+        function completeOrderReal() {
+
+            playSound('victory');
+
+            const newOrderId =
+                '#CB-2026-' +
+                Math.floor(
+                    1000 +
+                    Math.random() * 9000
+                );
+
+            document
+                .getElementById('confirmedOrderId')
+                .textContent = newOrderId;
+
+            const name =
+                document
+                    .getElementById('custName')
+                    .value ||
+                (
+                    currentUser
+                        ? currentUser.name
+                        : 'Explorer'
+                );
+
+            const flat =
+                document
+                    .getElementById('custFlat')
+                    .value ||
+                '';
+
+            const street =
+                document
+                    .getElementById('custStreet')
+                    .value ||
+                '';
+
+            const city =
+                document
+                    .getElementById('custCity')
+                    .value ||
+                '';
+
+            const pin =
+                document
+                    .getElementById('custPin')
+                    .value ||
+                '';
+
+            const orderObj = {
+
+                id: newOrderId,
+
+                date:
+                    new Date()
+                        .toLocaleDateString(
+                            'en-IN'
+                        ),
+
+                item:
+                    document
+                        .getElementById(
+                            'selectedPackTitle'
+                        )
+                        .textContent ||
+                    'CurioBloom Science Kit',
+
+                amount:
+                    document
+                        .getElementById(
+                            'finalOrderTotalText'
+                        )
+                        .textContent ||
+                    '₹899',
+
+                payment:
+                    selectedPaymentType.toUpperCase(),
+
+                status:
+                    'Order Placed & Packing'
+
+            };
+
+            if (currentUser) {
+
+                currentUser.orders.unshift(
+                    orderObj
+                );
+
+                saveUserData();
+
+            }
+
+            if (
+                selectedPaymentType ===
+                'whatsapp'
+            ) {
+
+                const text =
+                    `Hi CurioBloom! I want to confirm my order:\n\n` +
+                    `📦 Order ID: ${newOrderId}\n` +
+                    `👤 Name: ${name}\n` +
+                    `🏠 Address: ${flat}, ${street}, ${city} - ${pin}\n` +
+                    `💰 Amount: ${orderObj.amount}\n` +
+                    `💳 Payment Method: ${selectedPaymentType.toUpperCase()}`;
+
+                window.open(
+                    `https://wa.me/919876543210?text=${encodeURIComponent(text)}`,
+                    '_blank'
+                );
+
+            }
+
+            document
+                .getElementById('stepConfirm')
+                .classList.add('hidden');
+
+            document
+                .getElementById('stepOrderSuccess')
+                .classList.remove('hidden');
+
+            showToast(
+                '🎉 Order Placed Successfully!',
+                'bg-lime text-black'
+            );
+
+        }
+
+        /* =========================================================
+           LOCAL USER DATA
+        ========================================================= */
+
+        function saveUserData() {
+
+            if (currentUser) {
+
+                localStorage.setItem(
+                    'curiobloom_user',
+                    JSON.stringify(currentUser)
+                );
+
+            }
+
+        }
+
+        function updateLoggedInUI(
+            phone,
+            name
+        ) {
+
+            document
+                .getElementById('loggedOutNav')
+                .classList.add('hidden');
+
+            document
+                .getElementById('loggedInNav')
+                .classList.remove('hidden');
+
+            document
+                .getElementById('mobileLoggedOut')
+                .classList.add('hidden');
+
+            document
+                .getElementById('mobileLoggedIn')
+                .classList.remove('hidden');
+
+            document
+                .getElementById('navUserName')
+                .textContent =
+                name || 'Explorer';
+
+            document
+                .getElementById('mobileUserName')
+                .textContent =
+                name || 'Explorer';
+
+            document
+                .getElementById('dashHeaderName')
+                .textContent =
+                (name || 'Explorer') +
+                "'s Lab";
+
+            document
+                .getElementById('dashHeaderPhone')
+                .textContent =
+                phone || '';
+
+            document
+                .getElementById('certUserName')
+                .textContent =
+                name || 'Explorer';
+
+        }
+
+        /* =========================================================
+           FIREBASE LOGOUT
+        ========================================================= */
+
+        function handleLogout() {
+
+            playSound('click');
+
+            firebaseAuth
+                .signOut()
+                .then(function() {
+
+                    localStorage.removeItem(
+                        'curiobloom_user'
+                    );
+
+                    currentUser = null;
+                    firebaseUser = null;
+                    confirmationResult = null;
+
+                    document
+                        .getElementById('loggedOutNav')
+                        .classList.remove('hidden');
+
+                    document
+                        .getElementById('loggedInNav')
+                        .classList.add('hidden');
+
+                    document
+                        .getElementById('mobileLoggedOut')
+                        .classList.remove('hidden');
+
+                    document
+                        .getElementById('mobileLoggedIn')
+                        .classList.add('hidden');
+
+                    showToast(
+                        'Logged out successfully.',
+                        'bg-cream text-black'
+                    );
+
+                })
+                .catch(function(error) {
+
+                    console.error(
+                        'Logout Error:',
+                        error
+                    );
+
+                    showToast(
+                        'Unable to logout. Please try again.',
+                        'bg-coral text-white'
+                    );
+
+                });
+
+        }
+
+        /* =========================================================
+           DASHBOARD
+        ========================================================= */
+
+        function openDashboardModal(
+            initialTab = 'missions'
+        ) {
+
+            if (!currentUser) {
+
+                openAuthModal('login');
+
+                return;
+
+            }
+
+            document
+                .getElementById('dashboardModal')
+                .classList.remove('hidden');
+
+            switchDashTab(initialTab);
+
+            renderDashboardMissions();
+            renderDashboardOrders();
+
+        }
+
+        function closeDashboardModal() {
+
+            document
+                .getElementById('dashboardModal')
+                .classList.add('hidden');
+
+        }
+
+        function switchDashTab(tab) {
+
+            playSound('click');
+
+            document
+                .getElementById('dashMissionsTab')
+                .classList.add('hidden');
+
+            document
+                .getElementById('dashCertificateTab')
+                .classList.add('hidden');
+
+            document
+                .getElementById('dashOrdersTab')
+                .classList.add('hidden');
+
+            document
+                .getElementById('tabBtnMissions')
+                .className =
+                'flex-1 py-3 px-2 text-center hover:bg-canary border-r-2 border-black';
+
+            document
+                .getElementById('tabBtnCertificate')
+                .className =
+                'flex-1 py-3 px-2 text-center hover:bg-canary border-r-2 border-black';
+
+            document
+                .getElementById('tabBtnOrders')
+                .className =
+                'flex-1 py-3 px-2 text-center hover:bg-canary';
+
+            if (tab === 'missions') {
+
+                document
+                    .getElementById('dashMissionsTab')
+                    .classList.remove('hidden');
+
+                document
+                    .getElementById('tabBtnMissions')
+                    .className =
+                    'flex-1 py-3 px-2 text-center bg-canary border-r-2 border-black font-black';
+
+            } else if (tab === 'certificate') {
+
+                document
+                    .getElementById('dashCertificateTab')
+                    .classList.remove('hidden');
+
+                document
+                    .getElementById('tabBtnCertificate')
+                    .className =
+                    'flex-1 py-3 px-2 text-center bg-canary border-r-2 border-black font-black';
+
+            } else if (tab === 'orders') {
+
+                document
+                    .getElementById('dashOrdersTab')
+                    .classList.remove('hidden');
+
+                document
+                    .getElementById('tabBtnOrders')
+                    .className =
+                    'flex-1 py-3 px-2 text-center bg-canary font-black';
+
+            }
+
+        }
+
+        function renderDashboardMissions() {
+
+            if (
+                !currentUser ||
+                !currentUser.missions
+            )
+                return;
+
+            const container =
+                document.getElementById(
+                    'missionsListContainer'
+                );
+
+            container.innerHTML = '';
+
+            let completedCount = 0;
+
+            currentUser.missions.forEach(
+                (m, idx) => {
+
+                    if (m.completed)
+                        completedCount++;
+
+                    const div =
+                        document.createElement('div');
+
+                    div.className =
+                        `p-4 brutal-card rounded-2xl ${m.color} space-y-3`;
+
+                    div.innerHTML = `
+
+                        <div class="flex items-center justify-between">
+
+                            <div class="flex items-center gap-2">
+
+                                <span class="text-2xl">
+                                    ${m.icon}
+                                </span>
+
+                                <div>
+
+                                    <h4 class="font-black text-sm">
+                                        ${m.title}
+                                    </h4>
+
+                                    <p class="text-[10px] font-extrabold uppercase opacity-80">
+                                        ${m.type}
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                            <button onclick="toggleMissionComplete(${idx})"
+                                    class="px-3 py-1.5 bg-white text-black brutal-border rounded-xl text-xs font-black hover:scale-105 transition-transform">
+                                ${m.completed ? '✅ Completed' : '⭕ Mark Complete'}
+                            </button>
+
+                        </div>
+
+                        <div class="space-y-1">
+
+                            <label class="block text-[10px] font-black uppercase text-gray-800">
+                                My Lab Observation Notes:
+                            </label>
+
+                            <div class="flex gap-2">
+
+                                <input type="text"
+                                       id="noteInput_${idx}"
+                                       value="${m.note || ''}"
+                                       placeholder="e.g. Crystals grew into shiny triangles after 6 hours!"
+                                       class="w-full p-2 brutal-border rounded-lg text-xs font-bold bg-white text-black focus:outline-none">
+
+                                <button onclick="saveMissionNote(${idx})"
+                                        class="px-3 py-2 bg-black text-white brutal-border rounded-lg text-xs font-black">
+                                    Save
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                    container.appendChild(div);
+
+                }
+            );
+
+            document
+                .getElementById(
+                    'completedMissionsCount'
+                )
+                .textContent =
+                `${completedCount} / ${currentUser.missions.length}`;
+
+        }
+
+        function toggleMissionComplete(index) {
+
+            playSound('click');
+
+            if (!currentUser) return;
+
+            currentUser
+                .missions[index]
+                .completed =
+                !currentUser
+                    .missions[index]
+                    .completed;
+
+            saveUserData();
+
+            renderDashboardMissions();
+
+            showToast(
+                'Mission status updated!',
+                'bg-lime text-black'
+            );
+
+        }
+
+        function saveMissionNote(index) {
+
+            playSound('click');
+
+            if (!currentUser) return;
+
+            const noteVal =
+                document
+                    .getElementById(
+                        `noteInput_${index}`
+                    )
+                    .value;
+
+            currentUser
+                .missions[index]
+                .note = noteVal;
+
+            saveUserData();
+
+            showToast(
+                '📝 Lab note saved!',
+                'bg-canary text-black'
+            );
+
+        }
+
+        function renderDashboardOrders() {
+
+            if (
+                !currentUser ||
+                !currentUser.orders
+            )
+                return;
+
+            const container =
+                document.getElementById(
+                    'userOrdersList'
+                );
+
+            container.innerHTML = '';
+
+            if (
+                currentUser.orders.length === 0
+            ) {
+
+                container.innerHTML = `
+                    <div class="p-4 bg-white brutal-border rounded-2xl text-xs font-bold text-gray-500 text-center">
+                        No orders placed yet.
+                    </div>
+                `;
+
+                return;
+
+            }
+
+            currentUser.orders.forEach(ord => {
+
+                const div =
+                    document.createElement('div');
+
+                div.className =
+                    'bg-white p-4 brutal-card rounded-2xl space-y-2 text-xs font-bold';
+
+                div.innerHTML = `
+
+                    <div class="flex justify-between items-center border-b pb-2">
+
+                        <span class="font-black text-sm">
+                            ${ord.item}
+                        </span>
+
+                        <span class="bg-lime brutal-badge px-2 py-0.5 rounded text-[10px]">
+                            ${ord.amount}
+                        </span>
+
+                    </div>
+
+                    <div class="flex justify-between text-gray-600">
+
+                        <span>
+                            Order ID:
+                            <strong class="text-black">
+                                ${ord.id}
+                            </strong>
+                        </span>
+
+                        <span>
+                            Date: ${ord.date}
+                        </span>
+
+                    </div>
+
+                    <div class="p-2 bg-canary brutal-border rounded-lg flex items-center justify-between text-[11px]">
+
+                        <span>
+                            🚚 Status:
+                            <strong class="text-black">
+                                ${ord.status}
+                            </strong>
+                        </span>
+
+                        <span class="text-green-800 font-black">
+                            Express Courier
+                        </span>
+
+                    </div>
+
+                `;
+
+                container.appendChild(div);
+
+            });
+
+        }
+
+        /* =========================================================
+           CERTIFICATE
+        ========================================================= */
+
+        function printCertificate() {
+
+            window.print();
+
+        }
+
+        function downloadCertificatePNG() {
+
+            const canvas =
+                document.createElement('canvas');
+
+            canvas.width = 1000;
+            canvas.height = 700;
+
+            const ctx =
+                canvas.getContext('2d');
+
+            ctx.fillStyle = '#FFFDF5';
+            ctx.fillRect(
+                0,
+                0,
+                1000,
+                700
+            );
+
+            ctx.strokeStyle = '#000000';
+            ctx.lineWidth = 12;
+
+            ctx.strokeRect(
+                20,
+                20,
+                960,
+                660
+            );
+
+            ctx.fillStyle = '#D1FF52';
+
+            ctx.fillRect(
+                40,
+                40,
+                920,
+                80
+            );
+
+            ctx.strokeRect(
+                40,
+                40,
+                920,
+                80
+            );
+
+            ctx.fillStyle = '#121212';
+
+            ctx.font =
+                'bold 32px "Plus Jakarta Sans", sans-serif';
+
+            ctx.textAlign = 'center';
+
+            ctx.fillText(
+                '🌱 CURIOBLOOM SCIENCE ACADEMY',
+                500,
+                92
+            );
+
+            ctx.font =
+                '900 48px "Plus Jakarta Sans", sans-serif';
+
+            ctx.fillText(
+                'CERTIFICATE OF CURIOSITY',
+                500,
+                210
+            );
+
+            ctx.font =
+                'bold 20px "Plus Jakarta Sans", sans-serif';
+
+            ctx.fillStyle = '#4B5563';
+
+            ctx.fillText(
+                'THIS OFFICIAL CERTIFICATE IS AWARDED TO',
+                500,
+                260
+            );
+
+            const userName =
+                (
+                    currentUser
+                        ? currentUser.name
+                        : 'Aarav Sharma'
+                ).toUpperCase();
+
+            ctx.font =
+                '900 44px "Plus Jakarta Sans", sans-serif';
+
+            ctx.fillStyle = '#A855F7';
+
+            ctx.fillText(
+                userName,
+                500,
+                340
+            );
+
+            ctx.font =
+                'bold 20px "Plus Jakarta Sans", sans-serif';
+
+            ctx.fillStyle = '#1F2937';
+
+            ctx.fillText(
+                'For demonstrating exceptional curiosity, scientific observation, and',
+                500,
+                420
+            );
+
+            ctx.fillText(
+                'completing hands-on chemistry & physical science experiments.',
+                500,
+                455
+            );
+
+            ctx.strokeStyle = '#000000';
+            ctx.lineWidth = 4;
+
+            ctx.beginPath();
+
+            ctx.moveTo(100, 530);
+            ctx.lineTo(900, 530);
+
+            ctx.stroke();
+
+            ctx.font =
+                'bold 16px "Plus Jakarta Sans", sans-serif';
+
+            ctx.fillStyle = '#6B7280';
+
+            ctx.fillText(
+                'VERIFICATION ID: CB-CERT-2026-001',
+                250,
+                580
+            );
+
+            ctx.font =
+                'italic bold 22px Georgia, serif';
+
+            ctx.fillStyle = '#121212';
+
+            ctx.fillText(
+                'Lakshit Mishra & Vedik Raj Shekhar',
+                750,
+                580
+            );
+
+            const link =
+                document.createElement('a');
+
+            link.download =
+                `CurioBloom-Certificate-${userName}.png`;
+
+            link.href =
+                canvas.toDataURL('image/png');
+
+            link.click();
+
+            showToast(
+                '📜 Certificate PNG downloaded!',
+                'bg-lime text-black'
+            );
+
+        }
+
+        /* =========================================================
+           MANUAL DATA
+        ========================================================= */
+
+        const manualData = {
+
+            1: {
+
+                title:
+                    "The Crystal Vault — Supersaturated Crystals",
+
+                icon: "💎",
+
+                formula:
+                    "M₁V₁ + Heat ➔ Supersaturated Soln ➔ Nucleation Lattice",
+
+                materials: [
+                    "Monoammonium Phosphate Salt",
+                    "Seed Crystal Base",
+                    "Safety Goggles",
+                    "Thermal Jar"
+                ],
+
+                steps: [
+                    "Heat 100ml of water to 80°C under supervision.",
+                    "Dissolve 50g of crystal compound until no more dissolves (Supersaturation).",
+                    "Place seed crystal in jar and allow slow cooling over 12 hours.",
+                    "Observe geometric monoclinic crystal structures forming!"
+                ]
+
+            },
+
+            2: {
+
+                title:
+                    "The Wax Engineer — Phase State Thermal Lab",
+
+                icon: "🕯️",
+
+                formula:
+                    "Solid Phase (Wax) + ΔH (Heat) ➔ Liquid Phase ➔ Solidification",
+
+                materials: [
+                    "100% Natural Soy Wax Flakes",
+                    "Cotton Wicks",
+                    "Essential Oils",
+                    "Centering Clips"
+                ],
+
+                steps: [
+                    "Melt soy wax in hot water bath until reaching 65°C melting point.",
+                    "Add 5 drops of natural essential oil.",
+                    "Position cotton wick straight using the centering clip.",
+                    "Pour liquid wax into container and observe thermal crystallization solidifying."
+                ]
+
+            },
+
+            3: {
+
+                title:
+                    "The Soap Scientist — Surfactant Chemistry",
+
+                icon: "🧼",
+
+                formula:
+                    "Hydrophobic Tail + Hydrophilic Head ➔ Micelle Encapsulation",
+
+                materials: [
+                    "Glycerin Soap Base",
+                    "Natural Plant Pigments",
+                    "Custom Silicone Molds",
+                    "Spritz Bottle"
+                ],
+
+                steps: [
+                    "Melt vegetable glycerin soap base in safe microwave cup.",
+                    "Mix natural plant dye and mica glitter.",
+                    "Pour into silicone molds and spray alcohol mist to dissolve foam.",
+                    "Cool for 20 minutes to yield gentle cleansing surfactant bar!"
+                ]
+
+            },
+
+            4: {
+
+                title:
+                    "The Balm Lab — Viscosity & Lipids",
+
+                icon: "💄",
+
+                formula:
+                    "Beeswax Matrix + Botanical Oils ➔ Lipid Barrier Occlusion",
+
+                materials: [
+                    "Organic Beeswax",
+                    "Coconut Oil Blend",
+                    "Lip Balm Tubes",
+                    "Flavor Oils"
+                ],
+
+                steps: [
+                    "Combine beeswax and coconut oil in a 1:2 ratio.",
+                    "Gently heat until completely translucent liquid state.",
+                    "Stir in natural strawberry flavor oil.",
+                    "Pour into balm tubes to solidify into a protective moisturizing skin barrier."
+                ]
+
+            },
+
+            5: {
+
+                title:
+                    "The Fizz Lab — Neutralization Fizz Reaction",
+
+                icon: "🛁",
+
+                formula:
+                    "NaHCO₃ (Acid-Base) + C₆H₈O₇ ➔ CO₂ (Gas Bubbles) + H₂O + Salt",
+
+                materials: [
+                    "Sodium Bicarbonate",
+                    "Citric Acid",
+                    "Epsom Salts",
+                    "Spherical Mold"
+                ],
+
+                steps: [
+                    "Mix dry Baking Soda and Citric Acid powders thoroughly.",
+                    "Add 3 drops of water/oil and press tightly into spherical mold.",
+                    "Let dry for 4 hours.",
+                    "Drop into water and watch energetic CO2 gas release bubbles!"
+                ]
+
+            }
+
+        };
+
+        function openManualModal(id) {
+
+            playSound('click');
+
+            const data = manualData[id];
+
+            if (!data) return;
+
+            document
+                .getElementById('manualIcon')
+                .textContent =
+                data.icon;
+
+            document
+                .getElementById('manualTitle')
+                .textContent =
+                data.title;
+
+            document
+                .getElementById('manualFormula')
+                .textContent =
+                data.formula;
+
+            const matList =
+                document.getElementById(
+                    'manualMaterials'
+                );
+
+            matList.innerHTML =
+                data.materials
+                    .map(
+                        m => `<li>${m}</li>`
+                    )
+                    .join('');
+
+            const stepList =
+                document.getElementById(
+                    'manualSteps'
+                );
+
+            stepList.innerHTML =
+                data.steps
+                    .map(
+                        s => `<li>${s}</li>`
+                    )
+                    .join('');
+
+            document
+                .getElementById('manualModal')
+                .classList.remove('hidden');
+
+        }
+
+        function closeManualModal() {
+
+            document
+                .getElementById('manualModal')
+                .classList.add('hidden');
+
+        }
+
+        /* =========================================================
+           ORDER TOTAL
+        ========================================================= */
+
+        function calculateOrderTotal() {
+
+            const select =
+                document.getElementById(
+                    'kitPackageSelect'
+                );
+
+            const selectedOption =
+                select.options[
+                    select.selectedIndex
+                ];
+
+            currentPackagePrice =
+                parseInt(select.value);
+
+            const title =
+                selectedOption.getAttribute(
+                    'data-name'
+                );
+
+            document
+                .getElementById(
+                    'selectedPackTitle'
+                )
+                .textContent =
+                title;
+
+            document
+                .getElementById(
+                    'selectedPackBasePrice'
+                )
+                .textContent =
+                '₹' +
+                currentPackagePrice;
+
+            let finalPrice =
+                currentPackagePrice;
+
+            if (
+                activeAppliedCoupon ===
+                'CURIO10'
+            ) {
+
+                const discount =
+                    Math.round(
+                        currentPackagePrice *
+                        0.1
+                    );
+
+                finalPrice =
+                    currentPackagePrice -
+                    discount;
+
+                document
+                    .getElementById(
+                        'discountAmountText'
+                    )
+                    .textContent =
+                    '-₹' +
+                    discount;
+
+                document
+                    .getElementById(
+                        'couponDiscountRow'
+                    )
+                    .classList.remove(
+                        'hidden'
+                    );
+
+            } else {
+
+                document
+                    .getElementById(
+                        'couponDiscountRow'
+                    )
+                    .classList.add(
+                        'hidden'
+                    );
+
+            }
+
+            document
+                .getElementById(
+                    'finalOrderTotalText'
+                )
+                .textContent =
+                '₹' +
+                finalPrice;
+
+            const name =
+                document
+                    .getElementById(
+                        'custName'
+                    )
+                    .value ||
+                (
+                    currentUser
+                        ? currentUser.name
+                        : 'Explorer'
+                );
+
+            setupRealUpiLinks(
+                name,
+                document
+                    .getElementById(
+                        'custPin'
+                    )
+                    .value ||
+                '110001',
+                finalPrice
+            );
+
+        }
+
+        function applyCouponCode() {
+
+            playSound('click');
+
+            const code =
+                document
+                    .getElementById(
+                        'couponInput'
+                    )
+                    .value
+                    .trim()
+                    .toUpperCase();
+
+            if (code === 'CURIO10') {
+
+                activeAppliedCoupon =
+                    'CURIO10';
+
+                calculateOrderTotal();
+
+                showToast(
+                    '🎉 10% Discount Applied!',
+                    'bg-lime text-black'
+                );
+
+            } else {
+
+                showToast(
+                    'Invalid promo code. Try CURIO10!',
+                    'bg-coral text-white'
+                );
+
+            }
+
+        }
+
+        /* =========================================================
+           UPI
+        ========================================================= */
+
+        function copyUpiId() {
+
+            const upi =
+                "curiobloom@upi";
+
+            const tempInput =
+                document.createElement(
+                    'input'
+                );
+
+            tempInput.value = upi;
+
+            document.body.appendChild(
+                tempInput
+            );
+
+            tempInput.select();
+
+            document.execCommand(
+                'copy'
+            );
+
+            document.body.removeChild(
+                tempInput
+            );
+
+            showToast(
+                '📋 UPI ID copied: curiobloom@upi',
+                'bg-lime text-black'
+            );
+
+            playSound('click');
+
+        }
+
+        function setupRealUpiLinks(
+            name,
+            pin,
+            amount = 899
+        ) {
+
+            const upiId =
+                "curiobloom@upi";
+
+            const note =
+                `CurioBloom Kit Order for ${encodeURIComponent(name)}`;
+
+            const upiUri =
+                `upi://pay?pa=${upiId}&pn=CurioBloom%20Lab&am=${amount}&cu=INR&tn=${note}`;
+
+            document
+                .getElementById(
+                    'payBtnGenericUpi'
+                )
+                .href =
+                upiUri;
+
+            const qrUrl =
+                `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(upiUri)}`;
+
+            document
+                .getElementById(
+                    'dynamicUpiQrImg'
+                )
+                .src =
+                qrUrl;
+
+        }
+
+        /* =========================================================
+           FAQ
+        ========================================================= */
+
+        function toggleFaq(id) {
+
+            const ans =
+                document.getElementById(
+                    `faqAns${id}`
+                );
+
+            const icon =
+                document.getElementById(
+                    `faqIcon${id}`
+                );
+
+            if (
+                ans.classList.contains(
+                    'hidden'
+                )
+            ) {
+
+                ans.classList.remove(
+                    'hidden'
+                );
+
+                icon.textContent = '−';
+
+            } else {
+
+                ans.classList.add(
+                    'hidden'
+                );
+
+                icon.textContent = '+';
+
+            }
+
+        }
+
+        /* =========================================================
+           QUIZ
+        ========================================================= */
+
+        function answerQuiz(
+            step,
+            choice
+        ) {
+
+            document
+                .getElementById(
+                    `q${step}`
+                )
+                .classList.add(
+                    'hidden'
+                );
+
+            if (step < 3) {
+
+                document
+                    .getElementById(
+                        `q${step + 1}`
+                    )
+                    .classList.remove(
+                        'hidden'
+                    );
+
+            } else {
+
+                document
+                    .getElementById(
+                        'qResult'
+                    )
+                    .classList.remove(
+                        'hidden'
+                    );
+
+                playSound(
+                    'victory'
+                );
+
+            }
+
+        }
+
+        function resetQuiz() {
+
+            document
+                .getElementById(
+                    'qResult'
+                )
+                .classList.add(
+                    'hidden'
+                );
+
+            document
+                .getElementById(
+                    'q2'
+                )
+                .classList.add(
+                    'hidden'
+                );
+
+            document
+                .getElementById(
+                    'q3'
+                )
+                .classList.add(
+                    'hidden'
+                );
+
+            document
+                .getElementById(
+                    'q1'
+                )
+                .classList.remove(
+                    'hidden'
+                );
+
+        }
+
+        /* =========================================================
+           CANVAS LAB
+        ========================================================= */
+
+        let simType = 'fizz';
+        let labParticles = [];
+
+        function initLabCanvas() {
+
+            const canvas =
+                document.getElementById(
+                    'labCanvas'
+                );
+
+            if (!canvas) return;
+
+            canvas.addEventListener(
+                'click',
+                (e) => {
+
+                    triggerReaction();
+                    playSound('fizz');
+
+                }
+            );
+
+            requestAnimationFrame(
+                drawLabFrame
+            );
+
+        }
+
+        function setExperiment(type) {
+
+            playSound('click');
+
+            simType = type;
+
+            const title =
+                document.getElementById(
+                    'simTitle'
+                );
+
+            const desc =
+                document.getElementById(
+                    'simDesc'
+                );
+
+            const scienceNote =
+                document.getElementById(
+                    'simScienceNote'
+                );
+
+            document
+                .getElementById(
+                    'expBtnFizz'
+                )
+                .className =
+                type === 'fizz'
+                    ? 'px-4 py-2 bg-coral text-white brutal-btn rounded-xl text-xs font-black'
+                    : 'px-4 py-2 bg-white brutal-btn rounded-xl text-xs font-black';
+
+            document
+                .getElementById(
+                    'expBtnCrystal'
+                )
+                .className =
+                type === 'crystal'
+                    ? 'px-4 py-2 bg-violet text-white brutal-btn rounded-xl text-xs font-black'
+                    : 'px-4 py-2 bg-white brutal-btn rounded-xl text-xs font-black';
+
+            document
+                .getElementById(
+                    'expBtnSoap'
+                )
+                .className =
+                type === 'soap'
+                    ? 'px-4 py-2 bg-teal text-white brutal-btn rounded-xl text-xs font-black'
+                    : 'px-4 py-2 bg-white brutal-btn rounded-xl text-xs font-black';
+
+            if (type === 'fizz') {
+
+                title.textContent =
+                    "💥 Acid-Base Neutralization Lab";
+
+                desc.textContent =
+                    "Adjust reactant drops to produce energetic CO2 gas release!";
+
+                scienceNote.textContent =
+                    "When Baking Soda (Sodium Bicarbonate) reacts with Citric Acid in water, CO2 gas forms bubbles!";
+
+            } else if (type === 'crystal') {
+
+                title.textContent =
+                    "💎 Crystal Lattice Nucleation";
+
+                desc.textContent =
+                    "Higher temperatures speed up solute solubility and build shiny crystal structures!";
+
+                scienceNote.textContent =
+                    "Supersaturated solutions deposit solute molecules onto seed centers to grow geometric crystal crystals.";
+
+            } else if (type === 'soap') {
+
+                title.textContent =
+                    "🫧 Surfactant Micelle Foamer";
+
+                desc.textContent =
+                    "Test surfactant tension to generate dense cleansing foam bubbles!";
+
+                scienceNote.textContent =
+                    "Surfactant molecules have hydrophilic heads and hydrophobic tails that wrap around dirt in micelles.";
+
+            }
+
+            resetLabCanvas();
+
+        }
+
+        function updateLabParams() {
+
+            document
+                .getElementById(
+                    'valReactant'
+                )
+                .textContent =
+                document
+                    .getElementById(
+                        'sliderReactant'
+                    )
+                    .value;
+
+            document
+                .getElementById(
+                    'valTemp'
+                )
+                .textContent =
+                document
+                    .getElementById(
+                        'sliderTemp'
+                    )
+                    .value +
+                '°C';
+
+        }
+
+        function triggerReaction() {
+
+            const count =
+                parseInt(
+                    document
+                        .getElementById(
+                            'sliderReactant'
+                        )
+                        .value
+                ) * 6;
+
+            for (
+                let i = 0;
+                i < count;
+                i++
+            ) {
+
+                labParticles.push({
+
+                    x:
+                        150 +
+                        Math.random() *
+                        100,
+
+                    y:
+                        220 +
+                        Math.random() *
+                        20,
+
+                    vx:
+                        (
+                            Math.random() -
+                            0.5
+                        ) * 3,
+
+                    vy:
+                        -(
+                            1 +
+                            Math.random() *
+                            4
+                        ),
+
+                    size:
+                        simType === 'crystal'
+                            ? 6 +
+                              Math.random() *
+                              6
+                            : 3 +
+                              Math.random() *
+                              8,
+
+                    color:
+                        simType === 'fizz'
+                            ? '#FF7E5F'
+                            : (
+                                simType ===
+                                'crystal'
+                            )
+                                ? '#A855F7'
+                                : '#2DD4BF',
+
+                    life: 1.0
+
+                });
+
+            }
+
+        }
+
+        function resetLabCanvas() {
+
+            labParticles = [];
+
+        }
+
+        function drawLabFrame() {
+
+            const canvas =
+                document.getElementById(
+                    'labCanvas'
+                );
+
+            if (!canvas) return;
+
+            const ctx =
+                canvas.getContext(
+                    '2d'
+                );
+
+            ctx.clearRect(
+                0,
+                0,
+                canvas.width,
+                canvas.height
+            );
+
+            /* Draw Beaker */
+
+            ctx.strokeStyle =
+                '#000000';
+
+            ctx.lineWidth = 4;
+
+            ctx.beginPath();
+
+            ctx.moveTo(
+                130,
+                80
+            );
+
+            ctx.lineTo(
+                130,
+                250
+            );
+
+            ctx.quadraticCurveTo(
+                130,
+                265,
+                145,
+                265
+            );
+
+            ctx.lineTo(
+                255,
+                265
+            );
+
+            ctx.quadraticCurveTo(
+                270,
+                265,
+                270,
+                250
+            );
+
+            ctx.lineTo(
+                270,
+                80
+            );
+
+            ctx.stroke();
+
+            /* Liquid */
+
+            ctx.fillStyle =
+                simType === 'fizz'
+                    ? 'rgba(255, 240, 138, 0.6)'
+                    : (
+                        simType ===
+                        'crystal'
+                    )
+                        ? 'rgba(168, 85, 247, 0.3)'
+                        : 'rgba(45, 212, 191, 0.4)';
+
+            ctx.fillRect(
+                134,
+                150,
+                132,
+                110
+            );
+
+            /* Particles */
+
+            for (
+                let i =
+                    labParticles.length - 1;
+                i >= 0;
+                i--
+            ) {
+
+                const p =
+                    labParticles[i];
+
+                p.x += p.vx;
+                p.y += p.vy;
+
+                p.life -= 0.015;
+
+                ctx.fillStyle =
+                    p.color;
+
+                ctx.globalAlpha =
+                    Math.max(
+                        0,
+                        p.life
+                    );
+
+                if (
+                    simType ===
+                    'crystal'
+                ) {
+
+                    ctx.fillRect(
+                        p.x,
+                        p.y,
+                        p.size,
+                        p.size
+                    );
+
+                } else {
+
+                    ctx.beginPath();
+
+                    ctx.arc(
+                        p.x,
+                        p.y,
+                        p.size,
+                        0,
+                        Math.PI * 2
+                    );
+
+                    ctx.fill();
+
+                }
+
+                if (
+                    p.life <= 0 ||
+                    p.y < 70
+                ) {
+
+                    labParticles.splice(
+                        i,
+                        1
+                    );
+
+                }
+
+            }
+
+            ctx.globalAlpha = 1.0;
+
+            requestAnimationFrame(
+                drawLabFrame
+            );
+
+        }
+
+    </script>
+
+</body>
+</html>
