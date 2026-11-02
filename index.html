@@ -156,10 +156,6 @@
             animation: floatSlow 3s ease-in-out infinite;
         }
 
-        #recaptcha-container {
-            margin: 0 auto;
-        }
-
         @media print {
             body * {
                 visibility: hidden;
@@ -1636,7 +1632,7 @@
             <div class="p-6 space-y-6 overflow-y-auto flex-grow">
 
                 <!-- GOOGLE SIGN-IN -->
-                <div id="stepPhone" class="space-y-5">
+                <div id="stepGoogle" class="space-y-5">
 
                     <span id="badgeStep1"
                           class="bg-lime brutal-badge px-3 py-1 rounded-full text-xs font-black">
@@ -2700,7 +2696,7 @@
                 .classList.remove('hidden');
 
             document
-                .getElementById('stepPhone')
+                .getElementById('stepGoogle')
                 .classList.remove('hidden');
 
             document
@@ -2791,10 +2787,6 @@
                 .classList.remove('hidden');
 
         }
-
-        /* =========================================================
-           REAL FIREBASE PHONE OTP
-        ========================================================= */
 
         /* =========================================================
            GOOGLE SIGN-IN
@@ -2898,7 +2890,7 @@
                     if (currentAuthMode === 'login') {
 
                         document
-                            .getElementById('stepPhone')
+                            .getElementById('stepGoogle')
                             .classList.add('hidden');
 
                         document
@@ -2922,7 +2914,7 @@
                     } else {
 
                         document
-                            .getElementById('stepPhone')
+                            .getElementById('stepGoogle')
                             .classList.add('hidden');
 
                         document
